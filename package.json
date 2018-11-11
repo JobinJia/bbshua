@@ -1,7 +1,7 @@
 {
-  "name": "oms-frontend",
+  "name": "bbs-frontend",
   "version": "1.0.0",
-  "description": "oms front project 1.0.0",
+  "description": "bbs front project 1.0.0",
   "author": "Jobin <jobin.jia@beefinx.com>",
   "private": true,
   "scripts": {
