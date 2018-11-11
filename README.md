@@ -1,6 +1,6 @@
-# oms-frontend
+# bbs-frontend
 
-> oms front project 1.0.0
+> bss front project 1.0.0
 
 ## Build Setup
 
