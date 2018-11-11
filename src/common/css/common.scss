@@ -1,0 +1,452 @@
+$color:#2fa43c;
+$blackColor:#323232;
+$grayColor:#9b9b9b;
+$yellowColor:#ffc21f;
+$redColor: #F04844;
+@mixin prefixKey($key, $value) {
+    #{$key}: $value;
+    -o-#{$key}: $value;
+    -ms-#{$key}: $value;
+    -moz-#{$key}: $value;
+    -webkit-#{$key}: $value;
+}
+
+@mixin prefixValue($key, $value) {
+    #{$key}: #{$value};
+    #{$key}: -moz-#{$value};
+    #{$key}: -webkit-#{$value};
+}
+
+@mixin prefixKeyValue($key, $value) {
+    #{$key}: $value;
+    -o-#{$key}: -o-#{$value};
+    -ms-#{$key}: -ms-#{$value};
+    -moz-#{$key}: -moz-#{$value};
+    -webkit-#{$key}: -webkit-#{$value};
+}
+
+//flex
+@mixin flex {
+    @include prefixValue(display, flex);
+}
+
+@mixin flex-1 {
+    @include prefixKey(flex, 1);
+}
+
+@mixin flexVertical {
+    @include prefixKey(flex-direction, column);
+}
+
+@mixin flexMult {
+    @include prefixKey(flex-wrap, wrap);
+}
+
+@mixin flexLeft {
+    @include prefixKey(justify-content, flex-start);
+}
+
+@mixin flexCenter {
+    @include prefixKey(justify-content, center);
+}
+
+@mixin flexRight {
+    @include prefixKey(justify-content, flex-end);
+}
+
+@mixin flexLeftRight {
+    @include prefixKey(justify-content, space-between);
+}
+
+@mixin flexAround {
+    @include prefixKey(justify-content, space-around);
+}
+
+@mixin flexTop {
+    @include prefixKey(align-items, flex-start);
+}
+
+@mixin flexMiddle {
+    @include prefixKey(align-items, center);
+}
+
+@mixin flexBottom {
+    @include prefixKey(align-items, flex-end);
+}
+
+@mixin flexTopBottom {
+    @include prefixKey(align-items, stretch);
+}
+
+@mixin ellipsis($line) {
+    @include prefixValue(display, box);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @include prefixKey(line-clamp, $line);
+    @include prefixKey(box-orient, block-axis);
+    word-break: break-all;
+}
+
+// body>.el-container {
+//   padding: 0;
+//   .el-footer {
+//     text-align: center;
+//     font-family: '微软雅黑';
+//     font-weight: 410;
+//     font-style: normal;
+//     font-size: 12px;
+//     color: #6B6B6B;
+//     line-height: 100px;
+//     padding: 0;
+//   }
+//   .el-aside {
+//     text-align: center;
+//     line-height: 200px;
+//     padding: 0;
+//   }
+//   .el-main {
+//     // text-align: center;
+//     // line-height: 160px;
+//     padding: 0;
+//   }
+// }
+.el-container.is-vertical {
+    >.el-main {
+        padding: 0;
+    }
+    >.el-footer {
+        text-align: center;
+    }
+}
+
+.w {
+    width: 1100px;
+    margin: 0 auto;
+}
+
+.el-table .el-table__body-wrapper {
+    overflow: auto;
+}
+
+#logo {
+    float: left;
+    margin: 10px 10px 0 10px;
+}
+
+#cache3 {
+    font-family: '微软雅黑 Bold', '微软雅黑 Regular', '微软雅黑';
+    font-weight: 700;
+    font-size: 18px;
+    color: #FFFFFF;
+    text-align: left;
+    line-height: 28px;
+    line-height: 60px;
+}
+
+.h-container {
+    height: 50px;
+    line-height: 50px;
+    font-weight: 400;
+    font-style: normal;
+    color: #999999;
+    background-color: rgba(243, 243, 243, 1);
+    >.w {
+        @include flex;
+        @include flexLeftRight;
+        @include flexMiddle;
+        width: 1100px;
+        margin: 0 auto;
+        >.left {
+            height: 50px;
+            @include flex;
+            @include flexMiddle;
+            .nameList {
+                height: 20px;
+                line-height: 20px;
+                padding-left: 5px;
+                border-left: 5px solid rgba(26, 188, 156, 1);
+            }
+        }
+        .refresh {
+            width: 80px;
+            height: 30px;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 12px;
+            color: #666666;
+            background-color: rgba(255, 255, 255, 1);
+            border: 1px solid rgba(204, 204, 204, 1);
+            line-height: 30px;
+            text-align: center;
+        }
+    }
+}
+
+.buttons {
+    height: 70px;
+    line-height: 70px;
+    text-align: left;
+}
+
+.btn-red {
+    color: rgb(240, 72, 68);
+}
+
+.allcontainer {
+    width: 1100px;
+    margin: 0 auto;
+}
+
+// 浮动
+.u50561 {
+    float: left;
+    height: 50px;
+    font-family: '微软雅黑';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    text-align: left;
+    line-height: 50px;
+    color: #666666;
+    background-color: rgba(243, 243, 243, 1);
+    padding-left: 20px;
+}
+
+// 不浮动
+.u5056 {
+    height: 50px;
+    font-family: '微软雅黑';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    text-align: left;
+    line-height: 50px;
+    color: #666666;
+    background-color: rgba(243, 243, 243, 1);
+    padding-left: 20px;
+    border-bottom: 1px solid rgba(228, 228, 228, 1);
+}
+
+.u2487_div {
+    height: 50px;
+    font: 12px/50px "";
+    color: #666;
+    padding-left: 20px;
+    margin-top: 20px;
+    background-color: rgba(243, 243, 243, 1);
+    border: 1px solid rgba(228, 228, 228, 1);
+}
+
+.u2444_div {
+    border: 1px solid rgba(228, 228, 228, 1);
+    border-top: 0;
+    padding: 30px 50px;
+    min-height: 523px;
+    .zhou {
+        margin-left: 6px;
+        position: absolute;
+    }
+    li {
+        height: 65px;
+    }
+    .left {
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 15px;
+        height: auto;
+        .activeImg {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .img2 {
+            left: 2px;
+        }
+    }
+    .right {
+        position: relative;
+        top: -3px;
+        left: 30px;
+        p {
+            font-family: '微软雅黑';
+            font: 400 12px/22px "";
+            color: #999;
+        }
+        span {
+            font-family: '微软雅黑';
+            font: 400 12px/22px "";
+            color: #ccc;
+        }
+    }
+}
+
+// 竖直表格
+.shuzhibiaoge {
+    font-size: 14px;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid rgba(228, 228, 228, 1);
+    .left {
+        float: left;
+        width: 150px;
+        border-right: 1px solid rgba(228, 228, 228, 1);
+        background-color: rgba(234, 237, 241, .4);
+        color: #666;
+        font-weight: 700;
+        text-align: right;
+        padding-right: 17px;
+    }
+    .right {
+        padding-left: 10px;
+        font-size: 12px;
+        text-align: left;
+        color: #666;
+        position: relative;
+        a {
+            color: rgb(0, 0, 255);
+            position: absolute;
+            left: 255px;
+            width: 200px;
+        }
+    }
+}
+
+.te {
+    margin-top: -1px;
+}
+
+// 图片加文字的头信息
+.u1629 {
+    font-family: '微软雅黑';
+    font-size: 16px;
+    text-align: left;
+    line-height: 40px;
+    color: #666666;
+    margin-bottom: 10px;
+    img {
+        position: relative;
+        top: 3px;
+    }
+}
+
+.margintop {
+    margin-top: 30px;
+}
+
+// 合计
+.heji {
+    height: 60px;
+    font: 400 16px/60px "";
+    margin-top: -1px;
+    color: #666;
+    background-color: rgba(249, 250, 252, 1);
+    border: 1px solid rgba(228, 228, 228, 1);
+    text-align: right;
+    span {
+        font-weight: 700;
+        padding-right: 20px;
+    }
+}
+
+.zuo {
+    width: 135px;
+    height: 1480px;
+    margin-top: 20px;
+    float: left;
+    background-color: rgba(252, 252, 252, 1);
+    border: 1px solid rgba(228, 228, 228, 1);
+    position: relative;
+    .u439 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+}
+
+.you {
+    height: auto;
+    width: 960px;
+    margin-top: 20px;
+    float: right;
+    border: 1px solid rgba(228, 228, 228, 1);
+    border-left: 0;
+}
+
+// 项目经理部分样式
+.u165_div {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    margin-top: 20px;
+    color: #666;
+    background-color: rgba(243, 243, 243, 1);
+    border: 1px solid rgba(228, 228, 228, 1);
+}
+
+.te_btn {
+    float: left;
+    margin: 11px 20px 0 0;
+    border-radius: 0;
+    padding: 7px 40px;
+    position: relative;
+    left: -21px;
+}
+
+.u688_div {
+    border: 1px solid rgba(228, 228, 228, 1);
+    margin-top: -1px;
+    padding-top: 50px;
+    min-height: 650px;
+}
+
+//红包
+.yuan {
+    font: 14px/16px "";
+    color: #666;
+    padding-left: 12px;
+}
+
+.input {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 1;
+    outline: none;
+    padding: 0 15px;
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    width: 100%;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #409eff;
+}
+
+//选中按钮颜色
+.btnColor {
+    background: #409eff;
+    color: #fff;
+}
+
+.listreset,
+.listdel {
+    cursor: pointer;
+}
+
+.teinput {
+    width: 37px;
+    margin-left: 10px;
+    color: #666;
+    padding-left: 15px;
+    border-radius: 4px;
+    border: 1px solid #d8dce5;
+}

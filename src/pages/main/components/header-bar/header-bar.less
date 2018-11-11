@@ -1,0 +1,34 @@
+.header-bar{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: rgb(84, 92, 100);
+  color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .custom-top-con{
+    flex: auto;
+  }
+  .custom-content-con{
+    height: auto;
+    padding-right: 20px;
+    line-height: 64px;
+    box-sizing: border-box;
+    padding-top: 10px;
+    .user-msg {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      margin-top: -15px;
+      a{
+        text-decoration: underline;
+      }
+    }
+    & > *{
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+}
