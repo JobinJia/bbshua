@@ -93,6 +93,7 @@
       },
       changeTab (type) {
         this.type = type
+        this.updateList()
       },
       editorItem (row) {
         this.$router.push({

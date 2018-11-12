@@ -8,6 +8,15 @@ export const getShopList = (data) => {
   })
 }
 
+// 上下架
+export const downShop = (data) => {
+  return http.request({
+    url: 'shop/down',
+    data,
+    method: 'post'
+  })
+}
+
 // 新增
 export const addNewShop = (data) => {
   return http.request({

@@ -16,8 +16,7 @@
               <Input v-model="item.name"></Input>
             </FormItem>
             <FormItem label="分类">
-              <Select v-model="item.cate_id" placeholder="请选择分类" clearable filterable style="width: 49%;"
-                      @on-change="selectColorType">
+              <Select v-model="item.cate_id" placeholder="请选择分类" clearable filterable style="width: 49%;" @on-change="selectColorType">
                 <Option v-for="item in cateList" :key="item.id" :value="item.id" :label="item.name"></Option>
               </Select>
               <Select v-model="item.s_id" placeholder="请选择色系" clearable filterable style="width: 50%;"
@@ -109,7 +108,8 @@
             <FormItem>
               <Button type="primary" size="default" ghost @click="back">返回列表</Button>
               <Button type="primary" size="default" @click="saveShopping">保存商品</Button>
-              <Button type="primary" size="default">上架</Button>
+              <Button type="primary" size="default" @click="downHandle" v-if="item.status === '1'">上架</Button>
+              <Button type="primary" size="default" @click="downHandle" v-if="item.status === '3'">下架</Button>
             </FormItem>
           </Form>
         </div>
@@ -154,7 +154,7 @@
         uploadList: [],
         colorList: [],
         cateList: [],
-        currentColor: [],
+        // currentColor: [],
         petalList: [],
         levels: [],
         defaultList: []
@@ -170,6 +170,12 @@
       }
       this.type = type
       this.initPage()
+    },
+    computed: {
+      currentColor () {
+        let o = this.cateList.find(item => item.id === this.item.cate_id)
+        return (o && o.color_system) ? o.color_system : []
+      }
     },
     methods: {
       initPage () {
@@ -226,9 +232,7 @@
         data.cate_id = Number(data.cate_id)
         this.selectColorType(Number(data.cate_id))
         data.s_id = Number(data.s_id)
-        console.log(data.petal_id)
         data.petal_id = Number(data.petal_id)
-        console.log(data)
         this.item = data
       },
       async getColor () {
@@ -276,14 +280,26 @@
       },
       selectColorType (id) {
         if (!id) {
-          this.currentColor = []
           this.$refs.secColor.clearSingleSelect() // 组件方法，清空select
         } else {
-          let cur = this.cateList.find(item => item.id === id) || null
-          if (cur) {
-            this.currentColor = cur.color_system || []
-          }
-          console.log(this.currentColor)
+          // let cur = this.cateList.find(item => item.id === id) || null
+          // if (cur) {
+          //   this.currentColor = cur.color_system || []
+          // }
+          // console.log(this.currentColor)
+        }
+      },
+      async downHandle () {
+        let query = {
+          id: this.item.id,
+          status: this.item.status
+        }
+        let {code} = await this.$http.downShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: this.item.status === '1' ? '上架成功！' : '下架成功！'
+          })
+          this.initPage()
         }
       },
       getLevels () {
@@ -405,7 +421,7 @@
     },
     mounted () {
       this.uploadList = this.$refs.upload.fileList
-      this.selectColorType(Number(this.item.cate_id))
+      // this.selectColorType(Number(this.item.cate_id))
     }
   }
 </script>

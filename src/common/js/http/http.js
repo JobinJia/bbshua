@@ -68,8 +68,9 @@ class httpRequest {
       // let {response: {data: {msg}}} = error
       // Message.destroy(
       Message.destroy()
-      Message.error(`服务内部错误, ${error}`)
+      Message.error('系统错误,请联系管理员')
       // 对响应错误做点什么
+      console.error(error)
       return Promise.reject(error)
     })
   }

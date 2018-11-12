@@ -4,7 +4,8 @@
       <Form inline
             style="width:100%;display: flex;flex-direction: row;justify-content: space-between;align-content: center;">
         <FormItem style="width: 250px;">
-          <Input size="default" v-model="searchKey" @on-search="searchByKey" placeholder="请输入商品名称/品种代码" search enter-button="搜索"></Input>
+          <Input size="default" v-model="searchKey" @on-search="searchByKey" placeholder="请输入商品名称/品种代码" search
+                 enter-button="搜索"></Input>
         </FormItem>
         <FormItem>
           <Button size="default" icon="ios-add" @click="addShopping" type="primary">添加商品</Button>
@@ -12,7 +13,8 @@
       </Form>
     </Col>
     <Col span="24">
-      <Table style="margin-top: 10px;" size="large" border :columns="tableTitle" :data="tableData" :loading="loading"></Table>
+      <Table style="margin-top: 10px;" size="large" border :columns="tableTitle" :data="tableData"
+             :loading="loading"></Table>
       <div class="page-page">
         <Page @on-change="changePageData" :total="pages.total" show-total show-elevator
               :page-size="pages.pageSize"
@@ -50,7 +52,7 @@
             tooltip: true,
             render: (h, params) => {
               return <div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
-                <img onClick={this.viewHandler.bind(this, params)} src={params.row.cover} width="40" height="40" />
+                <img onClick={this.viewHandler.bind(this, params)} src={params.row.cover} width="40" height="40"/>
               </div>
             }
           }, {
@@ -105,10 +107,15 @@
             align: 'center',
             tooltip: true,
             render: (h, params) => {
+              let str = params.row.status === '1' ? <i-button size="small" icon="ios-add" type="primary"
+                                                              nativeOnClick={this.downHandle.bind(this, params.row)}></i-button>
+                : <i-button size="small" icon="ios-remove" type="error"
+                            nativeOnClick={this.downHandle.bind(this, params.row)}></i-button>
+
               return <div style="display:flex;flex-direction:row;justify-content:space-around;align-items:center;">
-                <i-button size="small" icon="ios-create-outline" type="primary" nativeOnClick={this.editorItem.bind(this, params)}></i-button>
-                <i-button size="small" icon="ios-add" type="primary"></i-button>
-                <i-button size="small" icon="ios-remove" type="error"></i-button>
+                <i-button size="small" icon="ios-create-outline" type="primary"
+                          nativeOnClick={this.editorItem.bind(this, params)}></i-button>
+                {str}
               </div>
             }
           }
@@ -167,6 +174,19 @@
             type: this.type
           }
         })
+      },
+      async downHandle (row) {
+        let query = {
+          id: row.id,
+          status: row.status
+        }
+        let {code} = await this.$http.downShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: row.status === '1' ? '上架成功！' : '下架成功！'
+          })
+          this.updateList()
+        }
       },
       editorItem (params) {
         this.$router.push({
