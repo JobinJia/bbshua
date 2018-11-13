@@ -109,7 +109,7 @@
         let {data} = res
         this.updateSystemStatusList(data)
         this.$router.push({
-          name: '_home'
+          name: 'spe'
         })
       })
     }

@@ -1,15 +1,21 @@
 <template>
-  <div class="top-menu">
-    <div class="menu-item" :class="item.checked ? 'active' : ''" v-for="(item, index) in list" :key="index"
-         @click="toggleTopMenu(item)">
+  <Menu active-name="order" mode="horizontal" theme="dark">
+    <MenuItem :name="item.name" v-for="(item, index) in list" :key="index" @on-select="handleSelect">
       {{item.meta.title}}
-    </div>
-  </div>
+    </MenuItem>
+  </Menu>
 </template>
 
 <script>
+  import Mixin from '@/pages/main/components/side-menu/mixin.js'
+  import SideMenuItem from '@/pages/main/components/side-menu/side-menu-item.vue'
+
   export default {
     name: 'topMenuList',
+    mixins: [Mixin],
+    components: {
+      SideMenuItem
+    },
     props: {
       list: {
         type: Array,
@@ -17,15 +23,16 @@
           return []
         },
         required: true
-      }
+      },
+      activeName: String
     },
     methods: {
-      toggleTopMenu (route) {
-        this.$emit('on-toggle-top-menu', route)
+      handleSelect (name) {
+        debugger
+        this.$emit('on-select', name)
       }
     },
     mounted () {
-
     }
   }
 </script>
