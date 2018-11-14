@@ -2,8 +2,10 @@
   <div>
     <Row type="flex" align="top" justify="start">
       <Col span="24" style="display: flex;flex-direction: row;justify-content: flex-start;align-items: center;">
-        <Button type="primary" size="default" @click="changeTab(1)">热销banner</Button>
-        <Button type="primary" size="default" ghost @click="changeTab(2)" style="margin-left: 10px;">首页banner</Button>
+        <Button type="primary" size="default" :ghost="type===2" @click="changeTab(1)">热销banner</Button>
+        <Button type="primary" size="default" :ghost="type===1" @click="changeTab(2)" style="margin-left: 10px;">
+          首页banner
+        </Button>
       </Col>
       <Col span="24" style="text-align: right;">
         <Button type="primary" size="default" @click="addNewItem">添加</Button>
@@ -11,9 +13,9 @@
       <Col span="24">
         <Table style="margin-top: 10px;" size="small" border :columns="tableTitle" :data="tableData"></Table>
         <!--<div class="page-page">-->
-          <!--<Page @on-change="changePageData" :total="pages.total" show-total show-elevator-->
-                <!--:page-size="pages.pageSize"-->
-                <!--:current.sync="pages.pageNum"/>-->
+        <!--<Page @on-change="changePageData" :total="pages.total" show-total show-elevator-->
+        <!--:page-size="pages.pageSize"-->
+        <!--:current.sync="pages.pageNum"/>-->
         <!--</div>-->
       </Col>
     </Row>
@@ -30,8 +32,7 @@
   export default {
     name: 'flower-banner',
     mixins: [Mixin],
-    components: {
-    },
+    components: {},
     data () {
       return {
         type: 1,
@@ -49,7 +50,7 @@
             title: '图片',
             render: (h, params) => {
               return <div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
-                <img onClick={this.viewHandler.bind(this, params)} src={params.row.cover} width="120" height="120" />
+                <img onClick={this.viewHandler.bind(this, params)} src={params.row.cover} width="120" height="120"/>
               </div>
             }
           }, {
@@ -78,18 +79,16 @@
       },
       async getList () {
         let query = {
-          type: this.type,
-          page: this.pages.pageNum
+          type: this.type
         }
         let {data} = await this.$http.getBanner(query)
+        console.log(data)
         this.tableData = data
       },
       updateList () {
         this.$nextTick(() => {
-          this.updateList()
+          this.getList()
         })
-      },
-      changePageData () {
       },
       changeTab (type) {
         this.type = type

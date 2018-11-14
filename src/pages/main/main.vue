@@ -11,6 +11,11 @@
       </side-menu>
     </Sider>
     <Layout style="margin-top: 64px;min-width: 1024px;">
+      <Header class="header-con">
+        <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
+          <top-menu :list="topMenuList" @on-toggle-top-menu="toggleTopMenu" slot="topMenu"></top-menu>
+        </header-bar>
+      </Header>
       <Content>
         <custom-bread-crumb show-icon :list="breadCrumbList"></custom-bread-crumb>
         <Layout>
@@ -29,9 +34,9 @@
 </template>
 <script>
   import SideMenu from './components/side-menu'
-  // import HeaderBar from './components/header-bar'
+  import HeaderBar from './components/header-bar'
   import User from './components/user'
-  // import TopMenu from './components/top-menus'
+  import TopMenu from './components/top-menus'
   import customBreadCrumb from '../main/components/header-bar/custom-bread-crumb/custom-bread-crumb'
   import {mapMutations, mapActions} from 'vuex'
   import './main.less'
@@ -40,8 +45,8 @@
     name: 'Main',
     components: {
       SideMenu,
-      // HeaderBar,
-      // TopMenu,
+      HeaderBar,
+      TopMenu,
       User,
       customBreadCrumb
     },
@@ -143,7 +148,7 @@
        * @description 初始化设置面包屑导航和标签导航
        */
       this.setTopMenuList()
-      // this.updateLeftMenuList()
+      this.setLeftMenuList()
       this.$nextTick(() => {
         this.activeName = this.$route.name
       })

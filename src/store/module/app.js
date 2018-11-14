@@ -4,7 +4,7 @@ import {
   // mergeLeftMenu,
 } from '@/common/js/util' //   mergeTopMenu
 import routers from '@/router/routers'
-// import topRouter from '@/router/topRouter'
+import topRouter from '@/router/topRouter'
 
 export default {
   state: {
@@ -55,7 +55,7 @@ export default {
   },
   actions: {
     initMenus ({dispatch, commit}) {
-      let finalRouter = routers.filter(item => (item.sort))
+      let finalRouter = topRouter
       finalRouter.forEach((item, index) => {
         if (index === 0) {
           item.checked = true
@@ -78,17 +78,15 @@ export default {
     },
     updateTopMenuList ({commit}, menuList) {
       // let finalRouter = mergeTopMenu(topRouter, menuList)
-      let finalRouter = routers
+      let finalRouter = topRouter
       localStorage.setItem('topMenu', JSON.stringify(finalRouter))
       commit('setTopMenuList', finalRouter)
     },
     updateLeftMenuList ({state, commit}, topList) {
       // menuList = (menuList && menuList.length !== 0) ? menuList : []
-      // topList = (topList && topList.length === 0) ? routers.filter(item => item.sort) : topList
       let currentRouter = topList.find(item => item.checked === true)
-      // let sort = currentRouter.sort
-      // let leftRouter = routers.filter(item => item.sort === sort)
-      let leftRouter = currentRouter.children
+      let sort = currentRouter.sort
+      let leftRouter = routers.filter(item => item.sort === sort)
       // save to localStorage
       localStorage.setItem('leftMenu', JSON.stringify(leftRouter))
       commit('setLeftMenuList', leftRouter)

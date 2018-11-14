@@ -151,8 +151,8 @@
           <th style="width:13%;font-size:14px;font-weight:400;">{{item.unit}}</th>
           <th style="width:13%;font-size:14px;font-weight:400;">{{item.count}}</th>
           <th style="width:13%;font-size:14px;font-weight:400;">{{item.true_count}}</th>
-          <th style="width:10%;font-size:14px;font-weight:400;">{{item.good_price/100}}</th>
-          <th style="width:13%;font-size:14px;font-weight:400;">{{item.true_good_price/100}}</th>
+          <th style="width:10%;font-size:14px;font-weight:400;">{{item.good_price}}</th>
+          <th style="width:13%;font-size:14px;font-weight:400;">{{item.true_good_price}}</th>
         </tr>
         </tbody>
       </table>
@@ -169,14 +169,14 @@
           <th style="width:13%;font-size:14px;font-weight:400;">{{item.unit}}</th>
           <th style="width:13%;font-size:14px;font-weight:400;">{{item.count}}</th>
           <th style="width:13%;font-size:14px;font-weight:400;">{{item.true_count}}</th>
-          <th style="width:10%;font-size:14px;font-weight:400;">{{item.good_price/100}}</th>
-          <th style="width:13%;font-size:14px;font-weight:400;">{{item.true_good_price/100}}</th>
+          <th style="width:10%;font-size:14px;font-weight:400;">{{item.good_price}}</th>
+          <th style="width:13%;font-size:14px;font-weight:400;">{{item.true_good_price}}</th>
         </tr>
         </tbody>
       </table>
       <div
         style="height:40px;line-height:40px;border:1px solid #ddd;border-top:0;text-align:right;padding-right:30px;font-size:14px;">
-        商品差价:{{sum/100}}
+        商品差价:{{sum}}
       </div>
       <div
         style="height:36px;line-height:36px;padding:0 5px;font-weight:700;border-left:1px solid #ddd;border-right:1px solid #ddd; font-size:14px;">
@@ -186,11 +186,11 @@
         <tbody style="width:100%;">
         <tr style="height:30px;">
           <td style="width:18%;font-size:14px;font-weight:400;">商品预付</td>
-          <td style="width:16%;font-size:14px;font-weight:400;">{{list.good_price/100}}</td>
+          <td style="width:16%;font-size:14px;font-weight:400;">{{list.good_price}}</td>
           <td style="width:17%;font-size:14px;font-weight:400;">商品结算价</td>
-          <th style="width:16%;font-size:14px;font-weight:400;">{{list.good_price/100+sum/100}}</th>
+          <th style="width:16%;font-size:14px;font-weight:400;">{{list.good_price+sum}}</th>
           <th style="width:17%;font-size:14px;font-weight:400;">商品差价</th>
-          <th style="width:16%;font-size:14px;font-weight:400;">{{sum/100}}</th>
+          <th style="width:16%;font-size:14px;font-weight:400;">{{sum}}</th>
         </tr>
         <tr style="height:30px;">
           <td style="width:18%;font-size:14px;font-weight:400;">物流预付</td>
