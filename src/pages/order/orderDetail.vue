@@ -54,7 +54,7 @@
             <Select clearable v-model="sendType" style="width: 250px;margin-top: 15px;">
               <Option v-for="(item, index) in sendTypeList" :key="index" :value="item.key" :label="item.val"></Option>
             </Select>
-            <Button type="primary" style="margin-top: 15px;">确定</Button>
+            <Button type="primary" style="margin-top: 15px;" @click="updSendTypeHandler">确定</Button>
           </Col>
           <Col span="24">
             <div style="padding: 10px 0 0 0; margin-top: 10px;font-size: 18px;">
@@ -1197,6 +1197,18 @@
       initPage () {
         this.getOrderDetailMsg()
       },
+      async updSendTypeHandler () {
+        let query = {
+          id: this.id,
+          send_type: this.sendType
+        }
+        let {code} = await this.$http.updSendType(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '修改物流方式成功！'
+          })
+        }
+      },
       async getOrderDetailMsg () {
         let query = {
           id: this.id
@@ -1212,6 +1224,9 @@
           pay_at_str: this.$util.getDateByTimestamp(data.pay_at),
           send_at_str: this.$util.getDateByTimestamp(data.send_at)
         }
+        // 物流方式
+        let sendType = data.send_type
+        this.sendType = sendType
         let consigeeMsg = [data.order_address] // 收货人
         this.consigneeData = consigeeMsg
         let baseArr = [base]
@@ -1335,7 +1350,11 @@
       },
       async updateAllPrice () {
         let query = {
-          order_id: this.id
+          order_id: this.id,
+          true_pack_price: this.sendData[0].true_pack_price,
+          true_warm_price: this.sendData[0].true_warm_price,
+          true_fre_price: this.sendData[0].true_fre_price,
+          diff_fre_price: this.sendData[0].allTruePrice
         }
         let {code} = await this.$http.updateAllPrice(query)
         if (code === 0) {

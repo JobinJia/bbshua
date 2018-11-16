@@ -108,10 +108,16 @@
             align: 'center',
             tooltip: true,
             render: (h, params) => {
+              let str = params.row.status === '1' ? <i-button size="small" icon="ios-add" type="primary"
+                                                              nativeOnClick={this.downHandle.bind(this, params.row)}></i-button>
+                : <i-button size="small" icon="ios-remove" type="warning"
+                            nativeOnClick={this.downHandle.bind(this, params.row)}></i-button>
+
               return <div style="display:flex;flex-direction:row;justify-content:space-around;align-items:center;">
-                <i-button size="small" icon="ios-create-outline" type="primary" nativeOnClick={this.editorItem.bind(this, params)}></i-button>
-                <i-button size="small" icon="ios-add" type="primary"></i-button>
-                <i-button size="small" icon="ios-remove" type="error"></i-button>
+                <i-button size="small" icon="ios-create-outline" type="primary"
+                          nativeOnClick={this.editorItem.bind(this, params)}></i-button>
+                {str}
+                <i-button size="small" icon="ios-trash" type="error" nativeOnClick={this.delHandler.bind(this, params)}></i-button>
               </div>
             }
           }
@@ -171,6 +177,31 @@
             type: this.type
           }
         })
+      },
+      async downHandle (row) {
+        let query = {
+          id: row.id,
+          status: row.status
+        }
+        let {code} = await this.$http.downShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: row.status === '1' ? '上架成功！' : '下架成功！'
+          })
+          this.updateList()
+        }
+      },
+      async delHandler (params) {
+        let query = {
+          id: params.row.id
+        }
+        let {code} = await this.$http.delShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '删除成功！'
+          })
+          this.getList()
+        }
       },
       editorItem (params) {
         this.$router.push({

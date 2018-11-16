@@ -9,6 +9,14 @@ export const getOrderList = (data) => {
   })
 }
 
+export const updSendType = (data) => {
+  return http.request({
+    url: '/order/change_send_type',
+    data,
+    method: 'put'
+  })
+}
+
 // 订单详情修改运费
 export const updatePrice = (data) => {
   return http.request({
