@@ -4,7 +4,9 @@
          style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;
          border: 1px solid #dddde2;padding: 8px 0;">
       <Input search enter-button="搜索" v-model="name" placeholder="请输入商品名称" @on-search="searchHandler" style="width: 300px;"/>
-      <Select placeholder="请选择分类" style="width: 200px;"></Select>
+      <Select clearable filterable v-model="cateId" placeholder="请选择分类" style="width: 200px;">
+        <Option v-for="item in cateList" :key="item.id" :value="item.id" :label="item.name"></Option>
+      </Select>
       <Button type="primary" size="large" :ghost="type !== 1" @click="changeTable(1)">热销花材</Button>
       <Button type="primary" size="large" :ghost="type !== 2" @click="changeTable(2)">特价商品</Button>
       <Button type="primary" size="large" :ghost="type !== 3" @click="changeTable(3)">新品速递</Button>
@@ -14,7 +16,7 @@
       <Button type="primary" size="large">导出价格</Button>
     </Col>
     <Col span="24" style="text-align: right;line-height: 35px;">
-      日期:2018.10.23
+      日期:{{newDate}}
     </Col>
     <Col span="24">
       <Table style="margin-top: 10px;" size="small" border :columns="tableTitle" :data="tableData"
@@ -49,6 +51,8 @@
     data () {
       return {
         type: 1, // default value
+        cateId: null,
+        cateList: [],
         name: null,
         tableLoading: false,
         tableChild: [
@@ -140,7 +144,12 @@
     methods: {
       initPage () {
         this.initTableTitle()
+        this.getCate()
         this.getList()
+      },
+      async getCate () {
+        let {data} = await this.$http.getCate()
+        this.cateList = data
       },
       searchHandler () {
         this.getList()
@@ -287,10 +296,11 @@
           status: '3',
           type: this.type,
           name: this.name,
+          cate_id: this.cateId,
           page: this.pages.pageNum
         }
         this.tableLoading = true
-        let {data: {data, total}} = await this.$http.getShopList(query)
+        let {data: {data, total, per_page}} = await this.$http.getShopList(query)
         data.forEach(item => {
           let levela = this.getSpec(item.spec, 'A级')
           let levelb = this.getSpec(item.spec, 'B级')
@@ -308,6 +318,7 @@
         this.tableLoading = false
         this.tableData = data
         this.pages.total = total
+        this.pages.pageSize = per_page
       },
       getObjName (str) {
         switch (str) {
@@ -390,6 +401,11 @@
           })
           this.updateList()
         }
+      }
+    },
+    computed: {
+      newDate () {
+        return this.$util.getDateByTimestamp(new Date().getTime() / 1000)
       }
     }
   }

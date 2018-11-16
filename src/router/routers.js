@@ -324,20 +324,22 @@ const appLeftRouter = [
       component: () => import('@pages/shopping/tags.vue')
     }],
     component: Main
-  }, {
-    path: '/marketing',
-    name: 'marketing',
-    sort: 1,
-    meta: {icon: '', title: '营销语'},
-    children: [{
-      path: '/marketing/index',
-      name: 'marketingIndex',
-      meta: {icon: '', title: '营销语'},
-      children: [],
-      component: () => import('@pages/shopping/marketing.vue')
-    }],
-    component: Main
-  }, {
+  },
+  // {
+  //   path: '/marketing',
+  //   name: 'marketing',
+  //   sort: 1,
+  //   meta: {icon: '', title: '营销语'},
+  //   children: [{
+  //     path: '/marketing/index',
+  //     name: 'marketingIndex',
+  //     meta: {icon: '', title: '营销语'},
+  //     children: [],
+  //     component: () => import('@pages/shopping/marketing.vue')
+  //   }],
+  //   component: Main
+  // },
+  {
     path: '/order',
     name: 'order',
     sort: 2,

@@ -97,8 +97,8 @@
           </Col>
           <Divider></Divider>
           <Col span="24" style="text-align: right;">
-            <Button type="primary" size="default" @click="saveDiffPrice">保存上海结算</Button>
-            <Button type="primary" size="default">保存昆明结算</Button>
+            <!--<Button type="primary" size="default" @click="saveDiffPrice">保存上海结算</Button>-->
+            <!--<Button type="primary" size="default">保存昆明结算</Button>-->
             <Button type="primary" size="default" :disabled="canEditor()" @click="createDiffPrice">保存</Button>
           </Col>
           <Col span="24">

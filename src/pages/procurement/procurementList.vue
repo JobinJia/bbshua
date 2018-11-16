@@ -65,7 +65,7 @@
             align: 'center',
             fixed: 'left',
             title: '规格',
-            key: 'unit'
+            key: 'unit_str'
           }, {
             align: 'center',
             fixed: 'left',
@@ -89,6 +89,22 @@
         }
         let {data} = await this.$http.getProList(query)
         // console.log(data)
+        let that = this
+        data.forEach(item => {
+         if (item.good_list && item.good_list.length > 0) {
+           item.good_list.forEach(it => {
+             let type = it.unit_type
+             let str = ''
+             if (type === '3') {
+               str = '若干枝'
+             } else {
+               let s = that.$util.getNameByStatus(type, 'unit_type', that.systemMap)
+               str = it.unit + s
+             }
+             it.unit_str = str
+           })
+         }
+        })
         this.proData = data
       },
       printHandle () {
