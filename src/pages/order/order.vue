@@ -201,6 +201,12 @@
             type: 'index',
             title: '序号'
           }, {
+            title: '支付编号',
+            align: 'center',
+            tooltip: true,
+            minWidth: 120,
+            key: 'pay_at'
+          }, {
             title: '订单编号',
             align: 'center',
             tooltip: true,

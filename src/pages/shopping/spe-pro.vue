@@ -21,18 +21,23 @@
               :current.sync="pages.pageNum"/>
       </div>
     </Col>
-    <Modal title="商品预览" v-model="visible">
-      <img :src="viewSrc" v-if="visible" style="width: 100%">
-    </Modal>
+    <!--<Modal title="商品预览" v-model="visible">-->
+      <!--<img :src="viewSrc" v-if="visible" style="width: 100%">-->
+    <!--</Modal>-->
+    <ImageView ref="imageViewRef" :viewSrc="viewSrc" :list="imgList"></ImageView>
   </Row>
 </template>
 
 <script type="text/jsx">
   import Mixin from '@/common/js/app-mixin'
+  import ImageView from '@/common/vue/imgeView'
 
   export default {
     name: 'spe-pro',
     mixins: [Mixin],
+    components: {
+      ImageView
+    },
     data () {
       return {
         type: '2',
@@ -109,18 +114,20 @@
             render: (h, params) => {
               let str = params.row.status === '1' ? <i-button size="small" icon="ios-add" type="primary"
                                                               nativeOnClick={this.downHandle.bind(this, params.row)}></i-button>
-                : <i-button size="small" icon="ios-remove" type="error"
+                : <i-button size="small" icon="ios-remove" type="warning"
                             nativeOnClick={this.downHandle.bind(this, params.row)}></i-button>
 
               return <div style="display:flex;flex-direction:row;justify-content:space-around;align-items:center;">
                 <i-button size="small" icon="ios-create-outline" type="primary"
                           nativeOnClick={this.editorItem.bind(this, params)}></i-button>
                 {str}
+                <i-button size="small" icon="ios-trash" type="error" nativeOnClick={this.delHandler.bind(this, params)}></i-button>
               </div>
             }
           }
         ],
-        tableData: []
+        tableData: [],
+        imgList: []
       }
     },
     created () {
@@ -149,10 +156,24 @@
       changePageData () {
         this.updateList()
       },
+      async delHandler (params) {
+        let query = {
+          id: params.row.id
+        }
+        let {code} = await this.$http.delShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '删除成功！'
+          })
+          this.getList()
+        }
+      },
       viewHandler (o) {
         if (o.row && o.row.cover) {
-          this.visible = true
+          // this.visible = true
+          this.$refs.imageViewRef.show()
           this.viewSrc = o.row.cover
+          this.imgList = o.row.photo
         }
       },
       updateList () {

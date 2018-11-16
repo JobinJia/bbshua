@@ -3,13 +3,13 @@
     <Col span="24"
          style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;
          border: 1px solid #dddde2;padding: 8px 0;">
-      <Input search enter-button="搜索" placeholder="请输入商品名称" style="width: 300px;"/>
+      <Input search enter-button="搜索" v-model="name" placeholder="请输入商品名称" @on-search="searchHandler" style="width: 300px;"/>
       <Select placeholder="请选择分类" style="width: 200px;"></Select>
-      <Button type="primary" size="large" @click="changeTable(1)">热销花材</Button>
-      <Button type="primary" size="large" @click="changeTable(2)" ghost>特价商品</Button>
-      <Button type="primary" size="large" @click="changeTable(3)" ghost>新品速递</Button>
-      <Button type="primary" size="large" @click="changeTable(4)" ghost>团购包邮</Button>
-      <Button type="primary" size="large" @click="changeTable(5)" ghost>花店直选</Button>
+      <Button type="primary" size="large" :ghost="type !== 1" @click="changeTable(1)">热销花材</Button>
+      <Button type="primary" size="large" :ghost="type !== 2" @click="changeTable(2)">特价商品</Button>
+      <Button type="primary" size="large" :ghost="type !== 3" @click="changeTable(3)">新品速递</Button>
+      <Button type="primary" size="large" :ghost="type !== 4" @click="changeTable(4)">团购包邮</Button>
+      <Button type="primary" size="large" :ghost="type !== 5" @click="changeTable(5)">花店直选</Button>
       <Button type="primary" size="large">上传价格</Button>
       <Button type="primary" size="large">导出价格</Button>
     </Col>
@@ -49,6 +49,7 @@
     data () {
       return {
         type: 1, // default value
+        name: null,
         tableLoading: false,
         tableChild: [
           {
@@ -139,6 +140,9 @@
     methods: {
       initPage () {
         this.initTableTitle()
+        this.getList()
+      },
+      searchHandler () {
         this.getList()
       },
       initTableTitle () {
@@ -282,6 +286,7 @@
         let query = {
           status: '3',
           type: this.type,
+          name: this.name,
           page: this.pages.pageNum
         }
         this.tableLoading = true

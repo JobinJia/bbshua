@@ -19,21 +19,24 @@
               :current.sync="pages.pageNum"/>
       </div>
     </Col>
-    <Modal title="商品预览" v-model="visible">
-      <img :src="viewSrc" v-if="visible" style="width: 100%">
-    </Modal>
+    <ImageView ref="imageViewRef" :viewSrc="viewSrc" :list="imgList"></ImageView>
   </Row>
 </template>
 
 <script type="text/jsx">
   import Mixin from '@/common/js/app-mixin'
+  import ImageView from '@/common/vue/imgeView'
 
   export default {
     name: 'hot-flower',
     mixins: [Mixin],
+    components: {
+      ImageView
+    },
     data () {
       return {
         type: '1',
+        imgList: [],
         loading: false,
         searchKey: null,
         visible: false,
@@ -107,8 +110,9 @@
             render: (h, params) => {
               return <div style="display:flex;flex-direction:row;justify-content:space-around;align-items:center;">
                 <i-button size="small" icon="ios-create-outline" type="primary" nativeOnClick={this.editorItem.bind(this, params)}></i-button>
-                <i-button size="small" icon="ios-add" type="primary"></i-button>
-                <i-button size="small" icon="ios-remove" type="error"></i-button>
+                <i-button size="small" icon="ios-add" type="primary" nativeOnClick={this.addHandler.bind(this, params)}></i-button>
+                <i-button size="small" icon="ios-copy" type="primary" nativeOnClick={this.copyHandler.bind(this, params)}></i-button>
+                <i-button size="small" icon="ios-trash" type="error" nativeOnClick={this.delHandler.bind(this, params)}></i-button>
               </div>
             }
           }
@@ -142,10 +146,35 @@
       changePageData () {
         this.updateList()
       },
+      async addHandler (params) {
+        let query = {
+          id: params.row.id,
+          status: 1
+        }
+        let {code} = await this.$http.downShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '添加成功！'
+          })
+        }
+      },
+      async delHandler (params) {
+        let query = {
+          id: params.row.id
+        }
+        let {code} = await this.$http.delShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '删除成功！'
+          })
+          this.getList()
+        }
+      },
       viewHandler (o) {
         if (o.row && o.row.cover) {
-          this.visible = true
+          this.$refs.imageViewRef.show()
           this.viewSrc = o.row.cover
+          this.imgList = o.row.photo
         }
       },
       updateList () {
@@ -156,6 +185,17 @@
       searchByKey () {
         this.initPageData()
         this.updateList()
+      },
+      async copyHandler (params) {
+        let query = {
+          id: params.row.id
+        }
+        let {code} = await this.$http.copyShop(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '复制成功！'
+          })
+        }
       },
       addShopping () {
         this.$router.push({

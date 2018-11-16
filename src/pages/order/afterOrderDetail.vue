@@ -80,6 +80,11 @@
             tooltip: true,
             key: 'phone'
           }, {
+            title: '提交申请时间',
+            align: 'center',
+            tooltip: true,
+            key: 'created_at_str'
+          }, {
             title: '收货日期',
             align: 'center',
             tooltip: true,
@@ -114,7 +119,8 @@
           'order_sn': data.order_sn,
           'phone': data.address.phone,
           'nick_name': data.nick_name,
-          'receipt_date': data.receipt_date
+          'receipt_date': data.receipt_date,
+          'created_at_str': this.$util.getDateByTimestamp(data.created_at)
         }]
       },
       loadImg (url) {

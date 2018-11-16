@@ -19,21 +19,24 @@
               :current.sync="pages.pageNum"/>
       </div>
     </Col>
-    <Modal title="商品预览" v-model="visible">
-      <img :src="viewSrc" v-if="visible" style="width: 100%">
-    </Modal>
+    <ImageView ref="imageViewRef" :viewSrc="viewSrc" :list="imgList"></ImageView>
   </Row>
 </template>
 
 <script type="text/jsx">
   import Mixin from '@/common/js/app-mixin'
+  import ImageView from '@/common/vue/imgeView'
 
   export default {
     name: 'flower',
     mixins: [Mixin],
+    components: {
+      ImageView
+    },
     data () {
       return {
         type: '5',
+        imgList: [],
         searchKey: null,
         loading: false,
         visible: false,
@@ -144,8 +147,9 @@
       },
       viewHandler (o) {
         if (o.row && o.row.cover) {
-          this.visible = true
+          this.$refs.imageViewRef.show()
           this.viewSrc = o.row.cover
+          this.imgList = o.row.photo
         }
       },
       updateList () {

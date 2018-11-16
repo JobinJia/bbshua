@@ -8,6 +8,21 @@ export const getShopList = (data) => {
   })
 }
 
+export const copyShop = (data) => {
+  return http.request({
+    url: `/shop/copy?${qs.stringify(data)}`,
+    method: 'get'
+  })
+}
+
+export const delShop = (data) => {
+  return http.request({
+    url: '/shop/good',
+    method: 'delete',
+    data
+  })
+}
+
 // 上下架
 export const downShop = (data) => {
   return http.request({
