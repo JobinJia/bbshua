@@ -17,6 +17,14 @@ export const updSendType = (data) => {
   })
 }
 
+export const updOrderDesc = (data) => {
+  return http.request({
+    url: '/order/update_des',
+    data,
+    method: 'put'
+  })
+}
+
 // 订单详情修改运费
 export const updatePrice = (data) => {
   return http.request({

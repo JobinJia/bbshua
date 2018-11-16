@@ -37,13 +37,14 @@
             <pageLabel :pageList="pageList1"></pageLabel>
           </Col>
           <Col span="24">
-            <div style="padding: 10px 0 0 0; margin-top: 10px;font-size: 18px;">
+            <div style="padding: 10px 0 0 0; margin-top: 10px;font-size: 18px;" v-if="pageBaseObject !== null">
               <Icon type="ios-bookmark" :size="20"/>
               内部备注
             </div>
-            <Input style="margin-top: 15px;" type="textarea" :rows="4" placeholder="请输入内容"></Input>
+            <Input v-if="pageBaseObject !== null" v-model="pageBaseObject.des" style="margin-top: 15px;" type="textarea"
+                   :rows="4" placeholder="请输入内容"></Input>
             <div style="text-align: right;margin-top: 10px;">
-              <Button type="primary">确认</Button>
+              <Button type="primary" @click="updDesHandler">确认</Button>
             </div>
           </Col>
           <Col span="24">
@@ -1271,6 +1272,18 @@
       },
       updateList () {
         this.$nextTick(() => this.getOrderDetailMsg())
+      },
+      async updDesHandler () {
+        let query = {
+          id: this.id,
+          des: this.pageBaseObject.des
+        }
+        let {code} = await this.$http.updOrderDesc(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '修改内部备注成功！'
+          })
+        }
       },
       preOrder () {
         this.id = this.pageBaseObject.pre_id

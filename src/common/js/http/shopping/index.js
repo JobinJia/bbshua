@@ -146,3 +146,35 @@ export const addBanner = (data) => {
     method: 'post'
   })
 }
+
+// wx-app
+export const getWxAppList = (data) => {
+  return http.request({
+    url: '/notify',
+    method: 'get'
+  })
+}
+
+export const updWxImg = (data) => {
+  return http.request({
+    url: '/notify',
+    method: 'put',
+    data
+  })
+}
+
+export const addWxImg = (data) => {
+  return http.request({
+    url: '/notify',
+    method: 'post',
+    data
+  })
+}
+
+export const delWxImg = (data) => {
+  return http.request({
+    url: '/notify',
+    method: 'delete',
+    data
+  })
+}
