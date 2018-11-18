@@ -1,4 +1,4 @@
-import { login, logout, getSystemStatus } from '@js/http/app'
+import * as Api from '@js/http/app'
 import { setToken, getToken, delToken } from '@/common/js/util'
 import Cookies from 'js-cookie'
 
@@ -33,19 +33,20 @@ export default {
     handleLogin ({ commit, state }, {userName, password}) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
-        login({
+        Api.login({
           userName,
           password
         }).then(res => {
+          debugger
           const data = res.data
           let {userInfo, menuList, token} = data
           commit('setToken', token)
           Cookies.set('userInfo', userInfo)
-          getSystemStatus().then(result => {
-            let {data} = result
-            commit('setBackendVersion', data.version)
-            this.dispatch('updateSystemStatusList', data)
-          })
+          // getSystemStatus().then(result => {
+          //   let {data} = result
+          //   commit('setBackendVersion', data.version)
+          //   this.dispatch('updateSystemStatusList', data)
+          // })
           resolve(menuList)
         }).catch(err => {
           reject(err)
@@ -55,7 +56,7 @@ export default {
     // 退出登录
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        Api.logout(state.token).then(() => {
           commit('setToken', '')
           commit('setAccess', [])
           delToken()

@@ -2,7 +2,7 @@ import Axios from 'axios'
 // import qs from 'qs'
 import {Message} from 'iview'
 // import Cookies from 'js-cookie'
-import {delToken} from '@js/util'
+import {delToken, getToken} from '@js/util'
 import router from '@/router'
 
 const baseURL = 'https://bbshua.com/api/admin/v2'
@@ -30,9 +30,7 @@ class httpRequest {
   interceptors (instance, url) {
     // 添加请求拦截器
     instance.interceptors.request.use(config => {
-      // if (!config.url.includes('/login')) {
-      //   config.headers['Authorization'] = 'token 123' // Cookies.get(TOKEN_KEY)
-      // }
+      config.headers['token'] = getToken('token')
       // 请求带上后端Cookie凭证
       // config.withCredentials = true
       return config

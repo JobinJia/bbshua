@@ -18,24 +18,53 @@
           </p>
         </div>
         <!-- 表单部分 -->
-        <!--<el-form :model="ruleForm2" status-icon ref="ruleForm2" label-width="100px" class="demo-ruleForm">-->
+        <Form :model="loginForm" :rules="formRules" inline ref="loginRef" :label-width="100"
+              style="width: 800px;height: 300px;">
+          <FormItem prop="userName" style="display: inline-block;">
+            <Input v-model="loginForm.userName" placeholder="请输入用户名称">
+              <Icon type="ios-person-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem prop="passWord">
+            <Input v-model="loginForm.passWord" type="password" placeholder="请输入登录密码">
+              <Icon type="ios-lock-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem>
+            <a href="javascript:;" @click="handleSubmit">
+              <img src="~@/assets/app/login.png" width="49" height="49"
+                   style="position:absolute;top:-4px;right:20px;"/>
+            </a>
+          </FormItem>
+
           <!--<div style="position:relative;top:170px;left:220px;width: 700px;height:100px;">-->
-            <!--<div class="u13_div">-->
-              <!--<img class="img " src="~@/assets/app/u18.png">-->
-              <!--&lt;!&ndash;<el-input v-model="ruleForm2.name" placeholder="请输入用户名称"&ndash;&gt;-->
-                        <!--&lt;!&ndash;@keyup.enter.native="handleSubmit('ruleForm2')"></el-input>&ndash;&gt;-->
-            <!--</div>-->
-            <!--<div class="u13_div password">-->
-              <!--<img width="19" class="img " src="~@/assets/app/u20.png">-->
-              <!--&lt;!&ndash;<el-input type="password" v-model="ruleForm2.password" auto-complete="off"&ndash;&gt;-->
-                        <!--&lt;!&ndash;placeholder="请输入登录密码" @keyup.enter.native="submitForm('ruleForm2')"></el-input>&ndash;&gt;-->
-            <!--</div>-->
-            <!--<a href="javascript:;" @click="handleSubmit('ruleForm2')">-->
-              <!--<img src="~@/assets/app/login.png" width="49" height="49"-->
-                   <!--style="position:absolute;top:2px;right:20px;"/>-->
-            <!--</a>-->
+          <!--<div class="u13_div">-->
+          <!--<img class="img " src="~@/assets/app/u18.png">-->
+          <!--&lt;!&ndash;<el-input v-model="ruleForm2.name" placeholder="请输入用户名称"&ndash;&gt;-->
+          <!--&lt;!&ndash;@keyup.enter.native="handleSubmit('ruleForm2')"></el-input>&ndash;&gt;-->
+          <!--<FormItem prop="userName" style="display: inline-block;">-->
+          <!--<Input v-model="loginForm.userName" placeholder="请输入用户名称">-->
+          <!--<Icon type="ios-person-outline" slot="prepend"></Icon>-->
+          <!--</Input>-->
+          <!--</FormItem>-->
           <!--</div>-->
-        <!--</el-form>-->
+          <!--<div class="u13_div password">-->
+          <!--<img width="19" class="img " src="~@/assets/app/u20.png">-->
+          <!--<FormItem prop="passWord">-->
+          <!--<Input v-model="loginForm.passWord" type="password" placeholder="请输入登录密码">-->
+          <!--<Icon type="ios-lock-outline" slot="prepend"></Icon>-->
+          <!--</Input>-->
+          <!--</FormItem>-->
+          <!--&lt;!&ndash;<el-input type="password" v-model="ruleForm2.password" auto-complete="off"&ndash;&gt;-->
+          <!--&lt;!&ndash;placeholder="请输入登录密码" @keyup.enter.native="submitForm('ruleForm2')"></el-input>&ndash;&gt;-->
+          <!--</div>-->
+
+          <!--<a href="javascript:;" @click="handleSubmit('ruleForm2')">-->
+          <!--<img src="~@/assets/app/login.png" width="49" height="49"-->
+          <!--style="position:absolute;top:2px;right:20px;"/>-->
+          <!--</a>-->
+          <!--</div>-->
+        </Form>
       </div>
     </div>
   </div>
@@ -52,21 +81,29 @@
 </template>
 
 <script>
-  import LoginForm from '@/common/vue/login-form'
+  // import LoginForm from '@/common/vue/login-form'
   import {mapActions} from 'vuex'
   import {setToken} from '../../common/js/util'
 
   export default {
+    components: {
+      // LoginForm
+    },
     data () {
       return {
-        ruleForm2: {
-          name: '',
-          password: ''
+        loginForm: {
+          userName: '',
+          passWord: ''
+        },
+        formRules: {
+          userName: [
+            {required: true, message: '用户名不能为空', trigger: 'blur'}
+          ],
+          passWord: [
+            {required: true, message: '密码不能为空', trigger: 'blur'}
+          ]
         }
       }
-    },
-    components: {
-      LoginForm
     },
     methods: {
       ...mapActions([
@@ -76,23 +113,34 @@
         'updateLeftMenuList',
         'updateSystemStatusList'
       ]),
-      handleSubmit ({userName, password}) {
-        setToken('123')
-        this.updateTopMenuList([])
-        this.$http.getSystemStatus().then(res => {
-          console.log(res)
-          let {data} = res
-          this.updateSystemStatusList(data)
-        })
-        this.$router.push({
-          name: '_home'
-        })
-        // this.handleLogin({userName, password}).then(res => {
-        //   this.updateTopMenuList(res, true)
-        //   this.$router.push({
-        //     name: 'home'
-        //   })
+      handleSubmit () { // {userName, password}
+        // setToken('123')
+        // this.updateTopMenuList([])
+        // this.$http.getSystemStatus().then(res => {
+        //   console.log(res)
+        //   let {data} = res
+        //   this.updateSystemStatusList(data)
         // })
+        // this.$router.push({
+        //   name: '_home'
+        // })
+        this.$refs.loginRef.validate(v => {
+          if (v) {
+            let query = {
+              name: this.loginForm.userName,
+              pwd: this.loginForm.passWord
+            }
+            this.$http.login(query).then(res => {
+              let {data} = res
+              setToken(data)
+              localStorage.setItem('userName', this.loginForm.userName)
+              this.updateTopMenuList([])
+              this.$router.push({
+                name: 'spe'
+              })
+            })
+          }
+        })
       }
     },
     computed: {
@@ -103,14 +151,11 @@
     created () {
     },
     mounted () {
-      setToken('123')
+      // setToken('123')
       this.initMenus()
       this.$http.getSystemStatus().then(res => {
         let {data} = res
         this.updateSystemStatusList(data)
-        this.$router.push({
-          name: 'spe'
-        })
       })
     }
   }

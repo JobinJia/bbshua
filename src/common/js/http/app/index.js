@@ -1,12 +1,8 @@
 import http from '../axiosInstance'
 // 登陆
-export const login = ({userName, password}) => {
-  const data = {
-    userName,
-    password
-  }
+export const login = (data) => {
   return http.request({
-    url: '/auth/login',
+    url: '/login',
     data,
     method: 'post'
   })
