@@ -6,6 +6,9 @@
           <Icon type="ios-bookmark"></Icon>
           商品信息
         </p>
+        <p slot="extra" style="margin-top: -5px;">
+          <Button type="primary" size="default" ghost @click="toBack">返回</Button>
+        </p>
         <div class="main"
              style="margin-top: 10px;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;">
           <Form :label-width="120" style="width: 60%;" :model="item">
@@ -37,22 +40,25 @@
             <FormItem label="营销语">
               <Input v-model="item.sale_word"></Input>
             </FormItem>
-            <FormItem label="销量(虚假)">
-              <Input v-model="item.sales"></Input>
-            </FormItem>
+            <!--<FormItem label="销量(虚假)">-->
+              <!--<Input v-model="item.sales"></Input>-->
+            <!--</FormItem>-->
             <FormItem label="店长最爱(数字越大越靠前)">
               <Input v-model="item.love"></Input>
             </FormItem>
             <FormItem label="周销量最高(数字越大越靠前)">
               <Input v-model="item.week"></Input>
             </FormItem>
+            <FormItem label="原价">
+              <Input v-model="item.y_price"></Input>
+            </FormItem>
             <FormItem label="规格">
               <Input v-model="item.unit"></Input>
             </FormItem>
             <FormItem>
               <RadioGroup v-model="item.unit_type">
-                <Radio label="1">枝/扎</Radio>
-                <Radio label="2">kg/扎</Radio>
+                <Radio label="2">枝/扎</Radio>
+                <Radio label="1">kg/扎</Radio>
                 <Radio label="3">若干枝</Radio>
               </RadioGroup>
             </FormItem>
@@ -108,6 +114,7 @@
             <FormItem>
               <Button type="primary" size="default" ghost @click="back">返回列表</Button>
               <Button type="primary" size="default" @click="saveShopping">保存商品</Button>
+              <!--<Button type="primary" size="default" @click="downHandle" v-if="!id">上架</Button>-->
               <Button type="primary" size="default" @click="downHandle" v-if="item.status === '1'">上架</Button>
               <Button type="primary" size="default" @click="downHandle" v-if="item.status === '3'">下架</Button>
             </FormItem>
@@ -155,6 +162,7 @@
         colorList: [],
         cateList: [],
         // currentColor: [],
+        id: null,
         petalList: [],
         levels: [],
         defaultList: []
@@ -294,13 +302,28 @@
           id: this.item.id,
           status: this.item.status
         }
-        let {code} = await this.$http.downShop(query)
-        if (code === 0) {
-          this.$Message.success({
-            content: this.item.status === '1' ? '上架成功！' : '下架成功！'
-          })
-          this.initPage()
-        }
+
+        let str = this.item.status === '1' ? '是否确认上架?' : '是否确认下架?'
+        this.$Modal.confirm({
+          title: '提示',
+          content: `<p>${str}</p>`,
+          onOk: async () => {
+            let {code} = await this.$http.downShop(query)
+            if (code === 0) {
+              this.$Message.success({
+                content: this.item.status === '1' ? '上架成功！' : '下架成功！'
+              })
+              this.initPage()
+            } else {
+              this.$Message.error({
+                content: '操作失败！'
+              })
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('已取消！')
+          }
+        })
       },
       getLevels () {
         return this.levels.filter(it => it.checked)
@@ -417,6 +440,9 @@
         let stash = JSON.parse(JSON.stringify(this.levels))
         stash[index].tips[id].model = v
         this.levels = stash
+      },
+      toBack () {
+        this.$router.go(-1)
       }
     },
     mounted () {

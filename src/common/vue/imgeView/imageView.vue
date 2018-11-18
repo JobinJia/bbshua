@@ -2,6 +2,7 @@
   <div>
     <Modal title="商品预览" v-model="visible" @on-cancel="cancel" @on-ok="cancel">
       <!--<img :src="viewSrc" v-if="visible" style="width: 100%">-->
+      <p slot="footer"></p>
       <Card dis-hover style="padding: 30px;" :bordered="false">
         <a href="javascript:;" style="position: absolute;left: -10px; top:50%;" @click="last">
           <Icon type="ios-arrow-dropleft" size="50"/>

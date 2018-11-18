@@ -22,7 +22,7 @@
     <Modal v-model="add" @on-ok="addHandler">
       <p slot="header" style="text-align: center;">请填写信息</p>
       <Form :label-width="100">
-        <FormItem label="请输入等级名称">
+        <FormItem label="请输入分类名称">
           <Input v-model="addItem.name"></Input>
         </FormItem>
       </Form>
@@ -49,7 +49,7 @@
           {
             align: 'center',
             fixed: 'left',
-            title: '品牌代码',
+            title: '分类名称',
             key: 'name'
           }, {
             align: 'center',

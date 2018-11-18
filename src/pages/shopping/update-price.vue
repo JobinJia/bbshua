@@ -30,14 +30,14 @@
     <Col span="24"
          style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;
          border: 1px solid #dddde2;padding: 8px 0;margin-top: 15px;">
-      <Button type="primary" size="default">添加</Button>
+      <Button type="primary" size="default" @click="toPage">添加</Button>
       <Button type="primary" size="default">复制全部价格</Button>
       <Button type="primary" size="default">清空全部价格</Button>
       <Button type="primary" size="default" @click="onLineHandle">一键全部上线</Button>
       <Button type="primary" size="default" @click="hideAllHandle">全部隐藏</Button>
       <!--<Button type="primary" size="default">输入确认</Button>-->
       <!--<Button type="primary" size="default">审核发布</Button>-->
-      <p style="color: red;"> * 必须在每天7:50前完成审核发布！</p>
+      <!--<p style="color: red;"> * 必须在每天7:50前完成审核发布！</p>-->
     </Col>
   </Row>
 </template>
@@ -66,14 +66,14 @@
             id: 3,
             title: 'C级'
           }, {
-            id: 4,
-            title: 'D级'
+            id: 6,
+            title: '优质'
           }, {
             id: 5,
             title: '活动'
           }, {
-            id: 6,
-            title: '优质'
+            id: 4,
+            title: 'D级'
           }
         ],
         tableTitle: [
@@ -125,11 +125,18 @@
             width: 120,
             render: (h, params) => {
               let id = params.row.id
+              let str = ''
+              if (params.row.is_show === '1') {
+                str = <i-button type="error" size="small" icon="ios-remove" style="marginLef:3px;" nativeOnClick={this.closeHandle.bind(this, params.row)} ></i-button>
+              } else {
+                str = <i-button type="success" size="small" icon="ios-add" style="marginLef:3px;" nativeOnClick={this.closeHandle.bind(this, params.row)} ></i-button>
+              }
+              // <i-button type="error" size="small" style="marginLeft:3px;"
+              //          nativeOnClick={this.closeHandle.bind(this, id)} icon="ios-trash"></i-button>
               let vm = <div style="display:flex;flexDirection:row;justifyContent:space-around;">
                 <i-button type="primary" size="small" replace icon="ios-refresh"
                           nativeOnClick={this.refreshPrice.bind(this, id)}></i-button>
-                <i-button type="error" size="small" style="marginLeft:3px;"
-                          nativeOnClick={this.closeHandle.bind(this, id)} icon="ios-trash"></i-button>
+                {str}
               </div>
               return vm
             }
@@ -203,22 +210,6 @@
               }
             }
           }, {
-            title: '库存',
-            align: 'center',
-            tooltip: true,
-            minWidth: 80,
-            render: (h, params) => {
-              let objName = this.getObjName(params.column.spec)
-              let o = params.row[objName]
-              if (o) {
-                return <i-input size="default" value={o.stock}
-                                onOn-change={this.bindVal.bind(this, params, objName, 'stock')}
-                                onOn-blur={this.modifyItem.bind(this, params, o, 'stock')}></i-input>
-              } else {
-                return <div>暂无</div>
-              }
-            }
-          }, {
             title: '昆明参考价',
             align: 'center',
             tooltip: true,
@@ -230,6 +221,22 @@
                 return <i-input size="default" value={o.km_price}
                                 onOn-change={this.bindVal.bind(this, params, objName, 'km_price')}
                                 onOn-blur={this.modifyItem.bind(this, params, o, 'km_price')}></i-input>
+              } else {
+                return <div>暂无</div>
+              }
+            }
+          }, {
+            title: '库存',
+            align: 'center',
+            tooltip: true,
+            minWidth: 80,
+            render: (h, params) => {
+              let objName = this.getObjName(params.column.spec)
+              let o = params.row[objName]
+              if (o) {
+                return <i-input size="default" value={o.stock}
+                                onOn-change={this.bindVal.bind(this, params, objName, 'stock')}
+                                onOn-blur={this.modifyItem.bind(this, params, o, 'stock')}></i-input>
               } else {
                 return <div>暂无</div>
               }
@@ -355,14 +362,14 @@
           this.updateList()
         }
       },
-      async closeHandle (id) {
+      async closeHandle (row) {
         let query = {
-          id
+          id: row.id
         }
         let {code} = await this.$http.hideShop(query)
         if (code === 0) {
           this.$Message.success({
-            content: '隐藏成功！'
+            content: row.is_show === '1' ? '下线成功！' : '上线成功'
           })
           this.updateList()
         }
@@ -400,6 +407,37 @@
             content: '全部隐藏成功！'
           })
           this.updateList()
+        }
+      },
+      toPage () {
+        switch (this.type) {
+          default:
+            break
+          case 1:
+            this.$router.push({
+              name: 'hotFlower'
+            })
+            break
+          case 2:
+            this.$router.push({
+              name: 'spe'
+            })
+            break
+          case 3:
+            this.$router.push({
+              name: 'new'
+            })
+            break
+          case 4:
+            this.$router.push({
+              name: 'team'
+            })
+            break
+          case 5:
+            this.$router.push({
+              name: 'flower'
+            })
+            break
         }
       }
     },

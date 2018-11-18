@@ -2,7 +2,7 @@
   <div>
     <Row type="flex" align="top" justify="start">
       <Col span="24" style="display: flex;flex-direction: row;justify-content: flex-start;align-items: center;">
-        <Button type="primary" size="default" :ghost="type===2" @click="changeTab(1)">热销banner</Button>
+        <!--<Button type="primary" size="default" :ghost="type===2" @click="changeTab(1)">热销banner</Button>-->
         <Button type="primary" size="default" :ghost="type===1" @click="changeTab(2)" style="margin-left: 10px;">
           首页banner
         </Button>
@@ -35,7 +35,7 @@
     components: {},
     data () {
       return {
-        type: 1,
+        type: 2,
         visible: false,
         viewSrc: null,
         tableTitle: [

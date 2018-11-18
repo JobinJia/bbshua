@@ -307,14 +307,14 @@
           if (this.list.created_at != 0) {
             this.list.created_at = this.parseTime(this.list.created_at)
           }
-          this.list.pack_price = this.list.order_freight.pack_price / 100//打包预付
-          this.list.true_pack_price = this.list.order_freight.true_pack_price / 100//打包实付
-          this.list.warm_price = this.list.order_freight.warm_price / 100//保温预付
-          this.list.true_warm_price = this.list.order_freight.true_warm_price / 100//保温实付
-          this.list.fre_price = this.list.order_freight.fre_price / 100//运费预付
-          this.list.true_fre_price = this.list.order_freight.true_fre_price / 100//运费实付
-          this.list.log_y_price = (parseInt(this.list.order_freight.pack_price) + parseInt(this.list.order_freight.warm_price) + parseInt(this.list.order_freight.fre_price)) / 100//物流预付
-          this.list.true_log_y_price = (parseInt(this.list.order_freight.true_fre_price) + parseInt(this.list.order_freight.true_pack_price) + parseInt(this.list.order_freight.true_warm_price)) / 100//物流预付
+          this.list.pack_price = this.list.order_freight.pack_price //打包预付
+          this.list.true_pack_price = this.list.order_freight.true_pack_price //打包实付
+          this.list.warm_price = this.list.order_freight.warm_price //保温预付
+          this.list.true_warm_price = this.list.order_freight.true_warm_price //保温实付
+          this.list.fre_price = this.list.order_freight.fre_price //运费预付
+          this.list.true_fre_price = this.list.order_freight.true_fre_price //运费实付
+          this.list.log_y_price = (parseInt(this.list.order_freight.pack_price) + parseInt(this.list.order_freight.warm_price) + parseInt(this.list.order_freight.fre_price)) //物流预付
+          this.list.true_log_y_price = (parseInt(this.list.order_freight.true_fre_price) + parseInt(this.list.order_freight.true_pack_price) + parseInt(this.list.order_freight.true_warm_price)) //物流预付
           this.list.diffAll_price = parseInt(this.list.true_log_y_price) - parseInt(this.list.log_y_price)
           let a = 0
           let b = 0

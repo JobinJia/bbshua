@@ -3,7 +3,9 @@
     <Col span="24" style="display: flex;flex-direction: row; justify-content: space-between;align-items: center;">
       <div style="display: flex;flex-direction: row;justify-content: center;align-items: center;">
         <Button type="primary" size="default" :ghost="status === 2" @click="toggleHandle(1)">待处理</Button>
-        <Button type="primary" size="default" :ghost="status === 1" style="margin-left: 10px;" @click="toggleHandle(2)">已处理</Button>
+        <Button type="primary" size="default" :ghost="status === 1" style="margin-left: 10px;" @click="toggleHandle(2)">
+          已处理
+        </Button>
       </div>
       <div style="display:flex;flex-direction: row;justify-content: flex-start;align-items: center;">
         <Input v-model="start_sn" placeholder="请输入开始订单号"></Input>
@@ -12,7 +14,8 @@
       </div>
     </Col>
     <Col span="24" style="margin-top: 15px;">
-      <Input style="width: 250px;" size="default" v-model="searchKey" @on-search="searchByKey" placeholder="请输入商品名称/品种代码" search enter-button="搜索"></Input>
+      <Input style="width: 250px;" size="default" v-model="searchKey" @on-search="searchByKey"
+             placeholder="请输入订单编号/用户昵称/收货人" search enter-button="搜索"></Input>
     </Col>
     <Col span="24" style="margin-top: 15px;">
       <Table size="large" border :columns="tableTitle" :data="tableData" :loading="loading"></Table>
@@ -27,6 +30,7 @@
 
 <script type="text/jsx">
   import Mixin from '@/common/js/app-mixin'
+
   export default {
     name: 'afterOrder',
     mixins: [Mixin],
@@ -74,8 +78,13 @@
             align: 'center',
             fixed: 'right',
             render: (h, params) => {
-              return <div>
-                <i-button type="primary" size="small" nativeOnClick={this.toDetail.bind(this, params.row)}>查看订单</i-button>
+              let str = this.status === 1 ? <i-button type="warning" size="small" style="marginLeft: 5px;"
+                                                      nativeOnClick={this.refundHandler.bind(this, params.row)}>一键退款
+              </i-button> : ''
+              return <div style="display:flex;flexDirection:row;justifyContent:space-around;alignItems:center">
+                <i-button type="primary" size="small" nativeOnClick={this.toDetail.bind(this, params.row)}>查看订单
+                </i-button>
+                {str}
               </div>
             }
           }
@@ -128,6 +137,32 @@
       },
       changePageData () {
         this.getList()
+      },
+      async refundHandler (row) {
+        let query = {
+          order_sn: row.id
+        }
+
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>确认退款?</p>',
+          onOk: async () => {
+            let {code} = await this.$http.refundOrder(query)
+            if (code === 0) {
+              this.$Message.success({
+                content: '退款成功！'
+              })
+              this.updList()
+            }else {
+              this.$Message.error({
+                content: '退款失败！'
+              })
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('您已取消！')
+          }
+        })
       },
       toDetail (row) {
         this.$router.push({

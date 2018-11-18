@@ -311,20 +311,21 @@ const appLeftRouter = [
       component: () => import('@pages/shopping/hot-search.vue')
     }],
     component: Main
-  }, {
-    path: '/tags',
-    name: 'tags',
-    sort: 1,
-    meta: {icon: '', title: '标签'},
-    children: [{
-      path: '/tags/index',
-      name: 'tagsIndex',
-      meta: {icon: '', title: '标签'},
-      children: [],
-      component: () => import('@pages/shopping/tags.vue')
-    }],
-    component: Main
   },
+  // {
+  //   path: '/tags',
+  //   name: 'tags',
+  //   sort: 1,
+  //   meta: {icon: '', title: '标签'},
+  //   children: [{
+  //     path: '/tags/index',
+  //     name: 'tagsIndex',
+  //     meta: {icon: '', title: '标签'},
+  //     children: [],
+  //     component: () => import('@pages/shopping/tags.vue')
+  //   }],
+  //   component: Main
+  // },
   // {
   //   path: '/marketing',
   //   name: 'marketing',
@@ -469,28 +470,30 @@ const appLeftRouter = [
         name: 'financeList',
         meta: {
           icon: '',
-          title: '结算列表'
+          title: '财务列表'
         },
         component: () => import('@pages/finance/financeList.vue')
       }
     ]
-  }, {
-    path: '/finance_yes',
-    name: 'financeYes',
-    sort: 6,
-    component: Main,
-    children: [
-      {
-        path: '/finance/yesterday',
-        name: 'yesterday',
-        meta: {
-          icon: '',
-          title: '昨日结算货款'
-        },
-        component: () => import('@pages/finance/yesterday.vue')
-      }
-    ]
-  }, {
+  },
+  // {
+  //   path: '/finance_yes',
+  //   name: 'financeYes',
+  //   sort: 6,
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: '/finance/yesterday',
+  //       name: 'yesterday',
+  //       meta: {
+  //         icon: '',
+  //         title: '昨日结算货款'
+  //       },
+  //       component: () => import('@pages/finance/yesterday.vue')
+  //     }
+  //   ]
+  // },
+  {
     path: '/auth',
     name: 'auth',
     sort: 7,

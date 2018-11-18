@@ -156,18 +156,71 @@
       changePageData () {
         this.updateList()
       },
+      async downHandle (row) {
+        let query = {
+          id: row.id,
+          status: 1
+        }
+        let str = row.status === '1' ? '是否确认上架?' : '是否确认下架?'
+        this.$Modal.confirm({
+          title: '提示',
+          content: `<p>${str}</p>`,
+          onOk: async () => {
+            let {code} = await this.$http.downShop(query)
+            if (code === 0) {
+              this.$Message.success({
+                content: row.status === '1' ? '上架成功！' : '下架成功！'
+              })
+              this.updateList()
+            } else {
+              this.$Message.error({
+                content: '操作失败！'
+              })
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('已取消！')
+          }
+        })
+      },
       async delHandler (params) {
         let query = {
           id: params.row.id
         }
-        let {code} = await this.$http.delShop(query)
-        if (code === 0) {
-          this.$Message.success({
-            content: '删除成功！'
-          })
-          this.getList()
-        }
+
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>是否确认该商品</p>',
+          onOk: async () => {
+            let {code} = await this.$http.delShop(query)
+            if (code === 0) {
+              this.$Message.success({
+                content: '删除成功！'
+              })
+              this.getList()
+            } else {
+              this.$Message.error({
+                content: '删除失败！'
+              })
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('已取消！')
+          }
+        })
       },
+      // async delHandler (params) {
+      //   let query = {
+      //     id: params.row.id
+      //   }
+      //   let {code} = await this.$http.delShop(query)
+      //   if (code === 0) {
+      //     this.$Message.success({
+      //       content: '删除成功！'
+      //     })
+      //     this.getList()
+      //   }
+      // },
       viewHandler (o) {
         if (o.row && o.row.cover) {
           // this.visible = true
@@ -196,19 +249,19 @@
           }
         })
       },
-      async downHandle (row) {
-        let query = {
-          id: row.id,
-          status: row.status
-        }
-        let {code} = await this.$http.downShop(query)
-        if (code === 0) {
-          this.$Message.success({
-            content: row.status === '1' ? '上架成功！' : '下架成功！'
-          })
-          this.updateList()
-        }
-      },
+      // async downHandle (row) {
+      //   let query = {
+      //     id: row.id,
+      //     status: row.status
+      //   }
+      //   let {code} = await this.$http.downShop(query)
+      //   if (code === 0) {
+      //     this.$Message.success({
+      //       content: row.status === '1' ? '上架成功！' : '下架成功！'
+      //     })
+      //     this.updateList()
+      //   }
+      // },
       editorItem (params) {
         this.$router.push({
           name: 'newProDetail',

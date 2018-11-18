@@ -4,7 +4,8 @@
       <Form inline
             style="width:100%;display: flex;flex-direction: row;justify-content: space-between;align-content: center;">
         <FormItem style="width: 250px;">
-          <Input size="default" v-model="searchKey" @on-search="searchByKey" placeholder="请输入商品名称/品种代码" search enter-button="搜索"></Input>
+          <Input size="default" v-model="searchKey" @on-search="searchByKey" placeholder="请输入商品名称/品种代码" search
+                 enter-button="搜索"></Input>
         </FormItem>
         <FormItem>
           <Button size="default" icon="ios-add" @click="addShopping" type="primary">添加商品</Button>
@@ -12,7 +13,8 @@
       </Form>
     </Col>
     <Col span="24">
-      <Table style="margin-top: 10px;" size="large" border :columns="tableTitle" :data="tableData" :loading="loading"></Table>
+      <Table style="margin-top: 10px;" size="large" border :columns="tableTitle" :data="tableData"
+             :loading="loading"></Table>
       <div class="page-page">
         <Page @on-change="changePageData" :total="pages.total" show-total show-elevator
               :page-size="pages.pageSize"
@@ -53,7 +55,7 @@
             tooltip: true,
             render: (h, params) => {
               return <div style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
-                <img onClick={this.viewHandler.bind(this, params)} src={params.row.cover} width="40" height="40" />
+                <img onClick={this.viewHandler.bind(this, params)} src={params.row.cover} width="40" height="40"/>
               </div>
             }
           }, {
@@ -108,11 +110,24 @@
             align: 'center',
             tooltip: true,
             render: (h, params) => {
+              // <i-button size="small" icon="ios-add" type="primary"-->
+              //             <!--nativeOnClick={this.addHandler.bind(this, params)}></i-button>
+              let str = ''
+              if (params.row.status === '1') {
+                str = <i-button type="primary" size="small" icon="ios-add"
+                                nativeOnClick={this.addHandler.bind(this, params)}></i-button>
+              } else {
+                str = <i-button type="primary" size="small" icon="ios-remove"
+                                nativeOnClick={this.addHandler.bind(this, params)}></i-button>
+              }
               return <div style="display:flex;flex-direction:row;justify-content:space-around;align-items:center;">
-                <i-button size="small" icon="ios-create-outline" type="primary" nativeOnClick={this.editorItem.bind(this, params)}></i-button>
-                <i-button size="small" icon="ios-add" type="primary" nativeOnClick={this.addHandler.bind(this, params)}></i-button>
-                <i-button size="small" icon="ios-copy" type="primary" nativeOnClick={this.copyHandler.bind(this, params)}></i-button>
-                <i-button size="small" icon="ios-trash" type="error" nativeOnClick={this.delHandler.bind(this, params)}></i-button>
+                <i-button size="small" icon="ios-create-outline" type="primary"
+                          nativeOnClick={this.editorItem.bind(this, params)}></i-button>
+                {str}
+                <i-button size="small" icon="ios-copy" type="primary"
+                          nativeOnClick={this.copyHandler.bind(this, params)}></i-button>
+                <i-button size="small" icon="ios-trash" type="error"
+                          nativeOnClick={this.delHandler.bind(this, params)}></i-button>
               </div>
             }
           }
@@ -151,24 +166,53 @@
           id: params.row.id,
           status: 1
         }
-        let {code} = await this.$http.downShop(query)
-        if (code === 0) {
-          this.$Message.success({
-            content: '添加成功！'
-          })
-        }
+        let str = params.row.status === '1' ? '是否确认上架?' : '是否确认下架?'
+        this.$Modal.confirm({
+          title: '提示',
+          content: `<p>${str}</p>`,
+          onOk: async () => {
+            let {code} = await this.$http.downShop(query)
+            if (code === 0) {
+              this.$Message.success({
+                content: params.row.status === '1' ? '上架成功！' : '下架成功！'
+              })
+              this.updateList()
+            } else {
+              this.$Message.error({
+                content: '操作失败！'
+              })
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('已取消！')
+          }
+        })
       },
       async delHandler (params) {
         let query = {
           id: params.row.id
         }
-        let {code} = await this.$http.delShop(query)
-        if (code === 0) {
-          this.$Message.success({
-            content: '删除成功！'
-          })
-          this.getList()
-        }
+
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>是否确认该商品</p>',
+          onOk: async () => {
+            let {code} = await this.$http.delShop(query)
+            if (code === 0) {
+              this.$Message.success({
+                content: '删除成功！'
+              })
+              this.getList()
+            } else {
+              this.$Message.error({
+                content: '删除失败！'
+              })
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('已取消！')
+          }
+        })
       },
       viewHandler (o) {
         if (o.row && o.row.cover) {

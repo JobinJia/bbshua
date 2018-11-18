@@ -9,6 +9,14 @@ export const getOrderList = (data) => {
   })
 }
 
+export const moveOrder = (data) => {
+  return http.request({
+    url: '/order/move',
+    method: 'post',
+    data
+  })
+}
+
 export const updSendType = (data) => {
   return http.request({
     url: '/order/change_send_type',
@@ -22,6 +30,14 @@ export const updOrderDesc = (data) => {
     url: '/order/update_des',
     data,
     method: 'put'
+  })
+}
+
+export const finishDiff = (data) => {
+  return http.request({
+    url: '/order/finish_diff',
+    method: 'post',
+    data
   })
 }
 
@@ -110,6 +126,52 @@ export const getAfterOrderList = (data) => {
   return http.request({
     url: `/order/after?${qs.stringify(data)}`,
     method: 'get'
+  })
+}
+
+export const getOtherTips = (data) => {
+  return http.request({
+    url: `/order/order_tip?${qs.stringify(data)}`,
+    method: 'get'
+  })
+}
+
+export const addTip = (data) => {
+  return http.request({
+    url: '/order/order_tip',
+    method: 'post',
+    data
+  })
+}
+export const removeItemTip = (data) => {
+  return http.request({
+    url: '/order/order_tip',
+    method: 'delete',
+    data
+  })
+}
+
+export const copyAllPrice = (data) => {
+  return http.request({
+    url: '/order/copy_price',
+    data,
+    method: 'post'
+  })
+}
+
+export const uplodOrderImg = (data) => {
+  return http.request({
+    url: '/order/tally',
+    data,
+    method: 'post'
+  })
+}
+
+export const refundOrder = (data) => {
+  return http.request({
+    url: '/order/refund',
+    method: 'post',
+    data
   })
 }
 

@@ -7,6 +7,9 @@
       <Button type="primary" size="default" @click="searchHandle">确定</Button>
       <Button type="primary" size="default" style="margin-left: auto;" @click="printHandle">打印</Button>
     </Col>
+    <Col style="margin-top: 15px;" v-show="(start_sn !== null && start_sn !== '')">
+      <h4 style="font-size: 16px;">订单编号: {{start_sn}}, {{end_sn}}</h4>
+    </Col>
     <Col span="24">
       <Card :padding="0" dis-hover :bordered="false">
         <div style="text-align: center;font-size: 15px;width: 100%;display: inline-block; margin-top: 10px;">

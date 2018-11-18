@@ -19,7 +19,7 @@
           <Button type="primary" ghost @click="freExport">订单运费导出</Button>
         </FormItem>
       </Form>
-      <Steps :current="0" status="wait">
+      <Steps v-if="pageBaseObject !== null" :current="getCurrentStep()" status="wait">
         <Step title="提交订单" content="这里是该步骤的描述信息"></Step>
         <Step title="支付订单" content="这里是该步骤的描述信息"></Step>
         <Step title="商家发货" content="这里是该步骤的描述信息"></Step>
@@ -32,7 +32,7 @@
           <Icon type="md-alert"/>
           当前状态: {{payStatus}}
         </p>
-        <Row style="padding: 10px 40px;">
+        <Row style="padding: 10px 40px;" v-if="pageBaseObject !== null">
           <Col span="24">
             <pageLabel :pageList="pageList1"></pageLabel>
           </Col>
@@ -41,12 +41,19 @@
               <Icon type="ios-bookmark" :size="20"/>
               内部备注
             </div>
-            <Input v-if="pageBaseObject !== null" v-model="pageBaseObject.des" style="margin-top: 15px;" type="textarea"
+            <Input v-model="pageBaseObject.des" style="margin-top: 15px;" type="textarea"
                    :rows="4" placeholder="请输入内容"></Input>
             <div style="text-align: right;margin-top: 10px;">
               <Button type="primary" @click="updDesHandler">确认</Button>
             </div>
           </Col>
+          <!--<Col span="24">-->
+          <!--<div style="padding: 10px 0 0 0; margin-top: 10px;font-size: 18px;" v-if="pageBaseObject !== null">-->
+          <!--<Icon type="ios-bookmark" :size="20"/>-->
+          <!--历史欠款-->
+          <!--</div>-->
+          <!--<Input disabled style="margin-top: 15px;width: 200px;" v-mode="pageBaseObject.user_diff"></Input>-->
+          <!--</Col>-->
           <Col span="24">
             <div style="padding: 10px 0 0 0; margin-top: 10px;font-size: 18px;">
               <Icon type="ios-bookmark" :size="20"/>
@@ -81,6 +88,9 @@
               <Icon type="ios-bookmark" :size="20"/>
               商品信息
             </div>
+            <Col span="24" style="margin-top: 15px;">
+              <Button type="primary" size="default" @click="copyAllHandler">复制数量和价格</Button>
+            </Col>
             <div style="margin-top: 15px;" v-for="(item, index) in bottomPageList" :key="index">
               <Col span="24">
                 <h4 style="padding: 10px 0px;font-weight: 400;">{{item.title}}</h4>
@@ -92,7 +102,7 @@
             <div
               style="display: flex;flex-direction: row;justify-content: flex-end;align-content: center;line-height: 40px;">
               <h3>商品差价:</h3>
-              <p style="font-size: 15px;color: red;">{{computedMethod}}计算</p>
+              <p style="font-size: 15px;color: red;">{{computedMethod}}</p>
             </div>
           </Col>
           <Divider></Divider>
@@ -118,27 +128,34 @@
               <Col span="12" style="display: flex;flex-direction: column;">
                 <Form :label-width="100">
                   <FormItem label="客户备注信息">
-                    <Input size="default" disabled></Input>
+                    <Input size="default" v-model="pageBaseObject.tips" disabled></Input>
                   </FormItem>
-                  <FormItem label="平台务注信息">
-                    <Input size="default" disabled></Input>
+                  <FormItem label="平台备注信息">
+                    <div>
+                      <Button type="primary" size="small" @click="editorTip = !editorTip">编辑</Button>
+                    </div>
+                    <div v-for="(item, index) in orderTips" :key="index">
+                      <p>{{item.tip}}<Button v-if="editorTip" type="error" size="small" style="height: 20px;line-height: 16px;margin-left: 10px;" @click="removeItemHandler(item)">删除</Button></p>
+                    </div>
                   </FormItem>
                 </Form>
               </Col>
               <Col span="12" style="display: flex;flex-direction: column;">
                 <Form :label-width="100">
                   <FormItem label="添加备注">
-                    <Input type="textarea" :rows="4" placeholder="请添加文字备注信息"></Input>
+                    <Input type="textarea" :rows="4" placeholder="请添加文字备注信息" v-model="addItemTip"></Input>
                   </FormItem>
                 </Form>
               </Col>
             </Row>
           </Col>
           <Col span="24" style="text-align: right;">
-            <Button size="default" type="primary">保存备注</Button>
+            <Button size="default" type="primary" @click="saveItemTipHandler">保存备注</Button>
           </Col>
           <Col span="24" v-if="pageBaseObject !== null">
             <Button v-if="pageBaseObject.pay_status === '2'" size="default" type="primary" @click="sureSend">确认发货
+            </Button>
+            <Button v-if="id !== null" size="default" type="primary" @click="diffMoneyHandler">已补差价
             </Button>
             <Button v-if="pageBaseObject.pay_status === '2' || pageBaseObject.pay_status === '3'" size="default"
                     type="primary" @click="printOne">电子面单打印
@@ -154,9 +171,9 @@
               size="default" @click="printFour"
               type="primary">订单详情打印
             </Button>
-            <Button size="default"
-                    type="primary">订单详情导出Excel
-            </Button>
+            <!--<Button size="default"-->
+            <!--type="primary">订单详情导出Excel-->
+            <!--</Button>-->
           </Col>
         </Row>
       </Card>
@@ -194,11 +211,12 @@
               </div>
             </Upload>
             <Modal title="预览" v-model="visible">
+              <p slot="footer"></p>
               <img :src="imgName" v-if="visible" style="width: 100%">
             </Modal>
           </FormItem>
         </Form>
-        <Button type="primary" size="default" style="margin-left: 100px;">保存</Button>
+        <Button type="primary" size="default" style="margin-left: 100px;" @click="uplodOrderImg">保存</Button>
       </Card>
     </Col>
   </Row>
@@ -216,6 +234,9 @@
     },
     data () {
       return {
+        orderTips: [],
+        addItemTip: null,
+        editorTip: false,
         sendType: null,
         computedMethod: '',
         pageList1: [
@@ -1120,47 +1141,47 @@
             title: '花材总重量',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'total_weight'
           }, {
             title: '上海总参考价',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'total_price'
           }, {
             title: '上海总结算价',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'true_sh_price'
           }, {
             title: '上海差价',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'sh_diff'
           }, {
             title: '物流预算',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'freight'
           }, {
             title: '物流结算',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'true_freight'
           }, {
             title: '物流差价',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'diff_fre_price'
           }, {
             title: '总差价',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'total_diff'
           }, {
             title: '总金金额',
             align: 'center',
             tooltip: true,
-            key: 'nick_name'
+            key: 'true_total_price'
           }
         ], // 汇总
         computedData: [],
@@ -1197,6 +1218,11 @@
     methods: {
       initPage () {
         this.getOrderDetailMsg()
+        this.getOtherTips()
+      },
+      async getOtherTips () {
+        let {data} = await this.$http.getOtherTips({id: this.id})
+        this.orderTips = data || []
       },
       async updSendTypeHandler () {
         let query = {
@@ -1210,6 +1236,11 @@
           })
         }
       },
+      getCurrentStep () {
+        if (this.pageBaseObject && this.pageBaseObject.pay_status) {
+          return this.pageBaseObject.pay_status * 1
+        }
+      },
       async getOrderDetailMsg () {
         let query = {
           id: this.id
@@ -1217,6 +1248,19 @@
         let {data} = await this.$http.getOrderList(query)
         this.pageBaseObject = data // 保存最初信息
         this.computedMethod = data.diff_good_price || ''
+        // 汇总
+        let allMsg = {
+          total_weight: data.total_weight,
+          total_price: data.total_price,
+          true_sh_price: data.true_sh_price,
+          sh_diff: data.sh_diff,
+          freight: data.freight,
+          true_freight: data.true_freight,
+          diff_fre_price: data.diff_fre_price,
+          total_diff: data.total_diff,
+          true_total_price: data.true_total_price
+        }
+        this.computedData = [allMsg]
         // 基本信息组装
         let base = {
           nick_name: data.user.nick_name,
@@ -1224,6 +1268,19 @@
           created_at_str: this.$util.getDateByTimestamp(data.created_at),
           pay_at_str: this.$util.getDateByTimestamp(data.pay_at),
           send_at_str: this.$util.getDateByTimestamp(data.send_at)
+        }
+        // 图片
+        let imgArr = data.tally
+        if (imgArr && imgArr.length !== 0) {
+          let stash = imgArr.map(it => {
+            return {
+              url: it
+            }
+          })
+          this.defaultList = stash
+          this.$nextTick(() => {
+            this.uploadList = this.$refs.upload.fileList
+          })
         }
         // 物流方式
         let sendType = data.send_type
@@ -1282,6 +1339,17 @@
         if (code === 0) {
           this.$Message.success({
             content: '修改内部备注成功！'
+          })
+        }
+      },
+      async diffMoneyHandler () {
+        let query = {
+          id: this.id
+        }
+        let {code} = await this.$http.finishDiff(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '操作成功！'
           })
         }
       },
@@ -1387,13 +1455,25 @@
           this.updateList()
         }
       },
+      async removeItemHandler (item) {
+        console.log(item)
+        let {code} = await this.$http.removeItemTip({
+          id: item.id
+        })
+        if (code === 0) {
+          this.$Message.success({
+            content: '删除成功！'
+          })
+          this.getOtherTips()
+        }
+      },
       async updateShopMsg (query) {
         let {code} = await this.$http.updateShopInOrderDetail(query)
         if (code === 0) {
-          this.$Message.success({
-            content: '修改成功！'
-          })
-          this.updateList()
+          // this.$Message.success({
+          //   content: '修改成功！'
+          // })
+          // this.updateList()
         }
       },
       async saveDiffPrice () {
@@ -1407,6 +1487,19 @@
         //   })
         //   this.updateList()
         // }
+      },
+      async saveItemTipHandler () {
+        let query = {
+          tip: this.addItemTip,
+          order_id: this.id
+        }
+        let {code} = await this.$http.addTip(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '新增成功！'
+          })
+          this.getOtherTips()
+        }
       },
       async createDiffPrice () {
         let query = {order_id: this.id}
@@ -1443,6 +1536,23 @@
             content: status === 1 ? '审核保存成功！' : '解锁成功！'
           })
           this.updateList()
+        }
+      },
+      async uplodOrderImg () {
+        if (this.uploadList.length !== 0) {
+          let res = this.uploadList.map(item => {
+            return item.url
+          })
+          let query = {
+            id: this.id,
+            tally: JSON.stringify(res)
+          }
+          let {code} = await this.$http.uplodOrderImg(query)
+          if (code === 0) {
+            this.$Message.success({
+              content: '保存成功！'
+            })
+          }
         }
       },
       sureSend () {
@@ -1497,6 +1607,18 @@
           name: 'printFour',
           params: {id: this.$route.params.id}
         })
+      },
+      async copyAllHandler () {
+        let query = {
+          id: this.id
+        }
+        let {code} = await this.$http.copyAllPrice(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '复制成功！'
+          })
+          this.updateList()
+        }
       }
     },
     mounted () {

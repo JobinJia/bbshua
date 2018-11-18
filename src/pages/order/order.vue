@@ -105,8 +105,8 @@
     </Col>
     <Col span="24" v-if="payStatus == 2">
       <Divider></Divider>
-      <Row type="flex" justify="space-around">
-        <Col span="8">
+      <Row type="flex" justify="start">
+        <Col span="24">
           <Form :label-width="80" inline>
             <FormItem :label-width="0">
               <Button type="primary" v-if="subType == 1">缓冲区</Button>
@@ -114,55 +114,67 @@
             </FormItem>
             <FormItem :label-width="0">
               <Button type="primary" v-if="subType == 2">发货区</Button>
-              <Button type="primary" @click="changeSubType(2)" v-else ghost>结算区</Button>
+              <Button type="primary" @click="changeSubType(2)" v-else ghost>发货区</Button>
             </FormItem>
             <FormItem :label-width="0">
               <Button type="primary" v-if="subType == 3">结算区</Button>
               <Button type="primary" @click="changeSubType(3)" v-else ghost>结算区</Button>
             </FormItem>
           </Form>
-          <Button type="primary" size="default">移到发货区</Button>
         </Col>
-        <Col span="8">
-          <Form :label-width="80" inline>
-            <FormItem :label-width="0">
-              <Button type="primary" v-if="subType == 1">缓冲区</Button>
-              <Button type="primary" @click="changeSubType(1)" v-else ghost>缓冲区</Button>
-            </FormItem>
-            <FormItem :label-width="0">
-              <Button type="primary" v-if="subType == 2">发货区</Button>
-              <Button type="primary" @click="changeSubType(2)" v-else ghost>结算区</Button>
-            </FormItem>
-            <FormItem :label-width="0">
-              <Button type="primary" v-if="subType == 3">结算区</Button>
-              <Button type="primary" @click="changeSubType(3)" v-else ghost>结算区</Button>
-            </FormItem>
-          </Form>
-          <Button type="primary" size="default">移入缓冲区</Button>
-          <Button type="primary" size="default">移入结算区</Button>
+        <Col span="24">
+          <div v-if="payStatus ==  2 && subType == 1">
+            <Button type="primary" size="default" @click="moveOrder(2)">移到发货区</Button>
+          </div>
+          <div v-if="payStatus ==  2 && subType == 2">
+            <Button type="primary" size="default" @click="moveOrder(3)">移到结算区</Button>
+            <Button type="primary" size="default" @click="moveOrder(1)">移到缓冲区</Button>
+          </div>
+          <div v-if="payStatus ==  2 && subType == 3">
+            <Button type="primary" size="default" @click="moveOrder(2)">移到发货区</Button>
+          </div>
         </Col>
-        <Col span="8">
-          <Form :label-width="80" inline>
-            <FormItem :label-width="0">
-              <Button type="primary" v-if="subType == 1">缓冲区</Button>
-              <Button type="primary" @click="changeSubType(1)" v-else ghost>缓冲区</Button>
-            </FormItem>
-            <FormItem :label-width="0">
-              <Button type="primary" v-if="subType == 2">发货区</Button>
-              <Button type="primary" @click="changeSubType(2)" v-else ghost>结算区</Button>
-            </FormItem>
-            <FormItem :label-width="0">
-              <Button type="primary" v-if="subType == 3">结算区</Button>
-              <Button type="primary" @click="changeSubType(3)" v-else ghost>结算区</Button>
-            </FormItem>
-          </Form>
-          <Button type="primary" size="default">移入发货区</Button>
-        </Col>
+        <!--<Col span="8">-->
+        <!--<Form :label-width="80" inline>-->
+        <!--<FormItem :label-width="0">-->
+        <!--<Button type="primary" v-if="subType == 1">缓冲区</Button>-->
+        <!--<Button type="primary" @click="changeSubType(1)" v-else ghost>缓冲区</Button>-->
+        <!--</FormItem>-->
+        <!--<FormItem :label-width="0">-->
+        <!--<Button type="primary" v-if="subType == 2">发货区</Button>-->
+        <!--<Button type="primary" @click="changeSubType(2)" v-else ghost>结算区</Button>-->
+        <!--</FormItem>-->
+        <!--<FormItem :label-width="0">-->
+        <!--<Button type="primary" v-if="subType == 3">结算区</Button>-->
+        <!--<Button type="primary" @click="changeSubType(3)" v-else ghost>结算区</Button>-->
+        <!--</FormItem>-->
+        <!--</Form>-->
+        <!--<Button type="primary" size="default">移入缓冲区</Button>-->
+        <!--<Button type="primary" size="default">移入结算区</Button>-->
+        <!--</Col>-->
+        <!--<Col span="8">-->
+        <!--<Form :label-width="80" inline>-->
+        <!--<FormItem :label-width="0">-->
+        <!--<Button type="primary" v-if="subType == 1">缓冲区</Button>-->
+        <!--<Button type="primary" @click="changeSubType(1)" v-else ghost>缓冲区</Button>-->
+        <!--</FormItem>-->
+        <!--<FormItem :label-width="0">-->
+        <!--<Button type="primary" v-if="subType == 2">发货区</Button>-->
+        <!--<Button type="primary" @click="changeSubType(2)" v-else ghost>结算区</Button>-->
+        <!--</FormItem>-->
+        <!--<FormItem :label-width="0">-->
+        <!--<Button type="primary" v-if="subType == 3">结算区</Button>-->
+        <!--<Button type="primary" @click="changeSubType(3)" v-else ghost>结算区</Button>-->
+        <!--</FormItem>-->
+        <!--</Form>-->
+        <!--<Button type="primary" size="default">移入发货区</Button>-->
+        <!--</Col>-->
       </Row>
     </Col>
     <Divider></Divider>
     <Col span="24">
-      <Table :loading="loading" size="small" border :columns="tableHead" :data="tableData"></Table>
+      <Table :loading="loading" size="small" border :columns="tableHead" :data="tableData"
+             @on-selection-change="selectHandler"></Table>
       <div class="page-page">
         <Page @on-change="changePageData" :total="pages.total" show-total show-elevator
               :page-size="pages.pageSize"
@@ -181,8 +193,9 @@
     data () {
       return {
         loading: false,
-        payStatus: '1',
-        subType: '',
+        payStatus: '2',
+        subType: '1',
+        selectedList: [],
         searchForm: {
           orderNo: null,
           startDate: null,
@@ -194,6 +207,11 @@
           endAmt: null
         },
         tableHead: [
+          {
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          },
           {
             width: 65,
             align: 'center',
@@ -211,7 +229,7 @@
             align: 'center',
             tooltip: true,
             minWidth: 120,
-            key: 'order_sn'
+            key: 'pay_sn'
           }, {
             title: '用户昵称',
             align: 'center',
@@ -253,13 +271,42 @@
             align: 'center',
             minWidth: 90,
             tooltip: true,
-            key: 'diffPrice'
+            render: (h, params) => {
+              let str = ''
+              if (this.payStatus === '1' || this.payStatus === '2') {
+                str = <div>-</div>
+              } else {
+                str = <div>{params.row.diffPrice}</div>
+              }
+              return str
+            }
           }, {
             title: '结算款',
             align: 'center',
             minWidth: 90,
             tooltip: true,
-            key: 'allPrice'
+            key: 'allPrice',
+            render: (h, params) => {
+              let str = ''
+              if (this.payStatus === '1') {
+                str = <div>-</div>
+              } else {
+                str = <div>{params.row.allPrice}</div>
+              }
+              return str
+            }
+          }, {
+            title: '欠款订单数',
+            align: 'center',
+            minWidth: 100,
+            tooltip: true,
+            key: 'diff_count'
+          }, {
+            title: '欠款总金额',
+            align: 'center',
+            minWidth: 100,
+            tooltip: true,
+            key: 'diff_money'
           }, {
             title: '订单状态',
             align: 'center',
@@ -271,7 +318,20 @@
             align: 'center',
             minWidth: 120,
             tooltip: true,
-            key: 'order_tip_number'
+            key: 'order_tip_number',
+            render: (h, params) => {
+              let str = ''
+              if (params.row.order_tip_number > 0) {
+                str = <div>
+                  <p>有备注</p>
+                </div>
+              } else {
+                str = <div>
+                  <p>暂无</p>
+                </div>
+              }
+              return str
+            }
           }, {
             fixed: 'right',
             title: '操作',
@@ -279,11 +339,38 @@
             tooltip: true,
             width: 220,
             render: (h, params) => {
-              let route = `/order/orderList/orderDetail/${params.row.id}`
-              let vm = <div style="display:flex;flexDirection:row;justifyContent:space-around;">
-                <i-button type="primary" size="small" to={route} replace>查看订单</i-button>
-                <i-button type="error" size="small" style="marginLeft:3px;">取消订单</i-button>
-                <i-button type="primary" size="small" style="marginLeft:3px;">暂未录入</i-button>
+              let cancelStr = ''
+              let noCancel = ['1', '3', '4', '5']
+              if (!noCancel.includes(this.payStatus)) {
+                cancelStr = <i-button type="error" size="small" style="marginLeft:3px;">取消订单</i-button>
+              }
+
+              // let pStr = ''
+              // if (!this.payStatus !== '1') {
+              //   pStr = <p style="marginLeft:3px;">暂未录入</p>
+              // }
+
+              let overStr = ''
+              if (!params.row.diff === 1) {
+                overStr = <p>未补差价</p>
+              } else if (!params.row.diff === 2) {
+                overStr = <p>未退差价</p>
+              } else if (params.row.diff === 0) {
+                overStr = <p style="marginLeft:3px;">暂未录入</p>
+              } else {
+                overStr = <p>已完成</p>
+              }
+
+              let other = ['1', '4', '5']
+              if (other.includes(this.payStatus)) {
+                overStr = ''
+              }
+
+              let vm = <div style="display:flex;flexDirection:row;justifyContent:space-around;alignItems:center">
+                <i-button type="primary" size="small" nativeOnClick={this.viewOrder.bind(this, params.row)}>查看订单
+                </i-button>
+                {cancelStr}
+                {overStr}
               </div>
               return vm
             }
@@ -309,13 +396,15 @@
           end_price: this.searchForm.endAmt,
           nick_name: this.searchForm.userName,
           real_name: this.searchForm.consignee,
-          type: this.subType,
+          order_type: this.subType,
           start_at: this.searchForm.startDate,
           end_at: this.searchForm.endDate,
           id: ''
         }
         this.loading = true
-        let {data: {total, data}} = await this.$http.getOrderList(query)
+        /* eslint-disable */
+        let {data: {total, data, per_page}} = await this.$http.getOrderList(query)
+        this.pages.pageSize = per_page
         this.loading = false
         let that = this
         data.forEach(item => {
@@ -323,6 +412,8 @@
           item.pay_status_str = that.$util.getNameByStatus(item.pay_status, 'pay_status', that.systemMap)
           item.created_at_str = that.$util.getDateByTimestamp(item.created_at)
           item.pay_at_str = that.$util.getDateByTimestamp(item.pay_at)
+          item.diff_count = item.user_diff.diff_count
+          item.diff_money = item.user_diff.diff_money
           item.diffPrice = (0 + item.diff_good_price + item.diff_fre_price) === 0 ? '' : 0 + item.diff_good_price + item.diff_fre_price
           item.allPrice = (0 + item.total_price + item.diff_good_price + item.diff_fre_price) === 0 ? '' : 0 + item.total_price + item.diff_good_price + item.diff_fre_price
         })
@@ -360,6 +451,35 @@
       },
       exportExcel () {
         window.location.href = 'https://bbshua.com/diff-order-export'
+      },
+      selectHandler (select) {
+        this.selectedList = select
+      },
+      viewOrder (row) {
+        this.$router.push({
+          name: 'orderDetail',
+          params: {
+            id: row.id
+          }
+        })
+      },
+      async moveOrder (type) {
+        if (this.selectedList.length === 0) {
+          this.$Message.error('请先勾选数据!')
+          return false
+        }
+        let ids = this.selectedList.map(it => it.id)
+        let query = {
+          order_type: type,
+          order: JSON.stringify(ids)
+        }
+        let {code} = await this.$http.moveOrder(query)
+        if (code === 0) {
+          this.$Message.success({
+            content: '操作成功！'
+          })
+          this.updateList()
+        }
       },
       toAfter () {
         this.$router.push({

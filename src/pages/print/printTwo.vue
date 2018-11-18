@@ -231,8 +231,8 @@
             return !(item.cate_id == 16 && item.true_good_price == 0)
           })
           for (let k = 0; k < this.list.hot_good.length; k++) {
-            this.list.hot_good[k].km_good_price = this.list.hot_good[k].km_good_price / 100
-            this.list.hot_good[k].true_km_price = this.list.hot_good[k].true_km_price / 100
+            this.list.hot_good[k].km_good_price = this.list.hot_good[k].km_good_price
+            this.list.hot_good[k].true_km_price = this.list.hot_good[k].true_km_price
             if (this.list.hot_good[k].unit_type == 1) {
               this.list.hot_good[k].unit = `${this.list.hot_good[k].unit}kg/扎`//列表页修改规格后缀
             } else {
@@ -240,8 +240,8 @@
             }
           }
           for (let k = 0; k < this.list.spec_good.length; k++) {
-            this.list.spec_good[k].km_good_price = this.list.spec_good[k].km_good_price / 100
-            this.list.spec_good[k].true_km_price = this.list.spec_good[k].true_km_price / 100
+            this.list.spec_good[k].km_good_price = this.list.spec_good[k].km_good_price
+            this.list.spec_good[k].true_km_price = this.list.spec_good[k].true_km_price
             if (this.list.spec_good[k].unit_type == 1) {
               this.list.spec_good[k].unit = `${this.list.spec_good[k].unit}kg/扎`//列表页修改规格后缀
             } else {
@@ -249,8 +249,8 @@
             }
           }
           for (let k = 0; k < this.list.rec_good.length; k++) {
-            this.list.rec_good[k].km_good_price = this.list.rec_good[k].km_good_price / 100
-            this.list.rec_good[k].true_km_price = this.list.rec_good[k].true_km_price / 100
+            this.list.rec_good[k].km_good_price = this.list.rec_good[k].km_good_price
+            this.list.rec_good[k].true_km_price = this.list.rec_good[k].true_km_price
             if (this.list.rec_good[k].unit_type == 1) {
               this.list.rec_good[k].unit = `${this.list.rec_good[k].unit}kg/扎`//列表页修改规格后缀
             } else {
@@ -258,8 +258,8 @@
             }
           }
           for (let k = 0; k < this.list.new_good.length; k++) {
-            this.list.new_good[k].km_good_price = this.list.new_good[k].km_good_price / 100
-            this.list.new_good[k].true_km_price = this.list.new_good[k].true_km_price / 100
+            this.list.new_good[k].km_good_price = this.list.new_good[k].km_good_price
+            this.list.new_good[k].true_km_price = this.list.new_good[k].true_km_price
             if (this.list.new_good[k].unit_type == 1) {
               this.list.new_good[k].unit = `${this.list.new_good[k].unit}kg/扎`//列表页修改规格后缀
             } else {
@@ -267,8 +267,8 @@
             }
           }
           for (let k = 0; k < this.list.free_good.length; k++) {
-            this.list.free_good[k].km_good_price = this.list.free_good[k].km_good_price / 100
-            this.list.free_good[k].true_km_price = this.list.free_good[k].km_km_price / 100
+            this.list.free_good[k].km_good_price = this.list.free_good[k].km_good_price
+            this.list.free_good[k].true_km_price = this.list.free_good[k].km_km_price
             if (this.list.free_good[k].unit_type == 1) {
               this.list.free_good[k].unit = `${this.list.free_good[k].unit}kg/扎`//列表页修改规格后缀
             } else {

@@ -102,7 +102,7 @@ export const hideShop = (data) => {
   return http.request({
     url: '/shop/show',
     data,
-    method: 'post'
+    method: 'delete'
   })
 }
 
