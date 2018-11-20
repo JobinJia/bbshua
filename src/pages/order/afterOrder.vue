@@ -9,13 +9,16 @@
       </div>
       <div style="display:flex;flex-direction: row;justify-content: flex-start;align-items: center;">
         <Input v-model="start_sn" placeholder="请输入开始订单号"></Input>
+        <Input v-model="start_sn" placeholder="请输入开始订单号"></Input>
         <Input v-model="end_sn" placeholder="请输入结束订单号" style="margin-left: 10px;"></Input>
         <Button type="primary" siz="default" style="margin-left: 10px;">导出数据</Button>
       </div>
     </Col>
-    <Col span="24" style="margin-top: 15px;">
-      <Input style="width: 250px;" size="default" v-model="searchKey" @on-search="searchByKey"
-             placeholder="请输入订单编号/用户昵称/收货人" search enter-button="搜索"></Input>
+    <Col span="24" style="margin-top: 15px;display: flex;flex-direction: row;justify-content: flex-start;">
+      <Input style="width: 200px;" size="default" v-model="nick_name" placeholder="请输入用户昵称"></Input>
+      <Input style="width: 200px;margin-left: 15px;" size="default" v-model="name" placeholder="请输入收货人"></Input>
+      <Input style="width: 250px;margin-left: 15px;" size="default" v-model="searchKey" @on-search="searchByKey"
+             placeholder="请输入订单编号" search enter-button="搜索"></Input>
     </Col>
     <Col span="24" style="margin-top: 15px;">
       <Table size="large" border :columns="tableTitle" :data="tableData" :loading="loading"></Table>
@@ -39,6 +42,8 @@
         loading: false,
         status: 1,
         start_sn: null,
+        nick_name: null,
+        name: null,
         end_sn: null,
         searchKey: null,
         tableTitle: [
@@ -78,7 +83,7 @@
             align: 'center',
             fixed: 'right',
             render: (h, params) => {
-              let str = this.status === 1 ? <i-button type="warning" size="small" style="marginLeft: 5px;"
+              let str = this.status === 2 ? <i-button type="warning" size="small" style="marginLeft: 5px;"
                                                       nativeOnClick={this.refundHandler.bind(this, params.row)}>一键退款
               </i-button> : ''
               return <div style="display:flex;flexDirection:row;justifyContent:space-around;alignItems:center">
@@ -111,6 +116,8 @@
           status: this.status === 1 ? '1' : '3',
           start_sn: this.start_sn,
           end_sn: this.end_sn,
+          nick_name: this.nick_name,
+          name: name,
           order_sn: this.searchKey
         }
         this.loading = true

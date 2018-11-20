@@ -1143,17 +1143,17 @@
             tooltip: true,
             key: 'total_weight'
           }, {
-            title: '上海总参考价',
+            title: '商品总参考价',
             align: 'center',
             tooltip: true,
             key: 'total_price'
           }, {
-            title: '上海总结算价',
+            title: '商品总结算价',
             align: 'center',
             tooltip: true,
             key: 'true_sh_price'
           }, {
-            title: '上海差价',
+            title: '商品差价',
             align: 'center',
             tooltip: true,
             key: 'sh_diff'
@@ -1178,7 +1178,7 @@
             tooltip: true,
             key: 'total_diff'
           }, {
-            title: '总金金额',
+            title: '订单结算款',
             align: 'center',
             tooltip: true,
             key: 'true_total_price'

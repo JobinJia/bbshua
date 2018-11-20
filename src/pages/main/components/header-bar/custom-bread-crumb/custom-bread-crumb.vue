@@ -1,5 +1,5 @@
 <style scoped lang="less">
-  .bread{
+  .bread {
     padding-left: 20px;
     &::before {
       content: "";
@@ -14,7 +14,8 @@
   }
 </style>
 <template>
-  <div class="custom-bread-crumb" style="width: 100%;height: 50px;line-height: 50px;background: #f3f3f3;position: fixed; z-index: 99;">
+  <div class="custom-bread-crumb"
+       style="width: 100%;height: 50px;line-height: 50px;background: #f3f3f3;position: fixed; z-index: 99;">
     <Breadcrumb :style="{fontSize: `${fontSize}px`}">
       <BreadcrumbItem>
         <div class="bread">{{showTitle()}}</div>
@@ -49,13 +50,12 @@
         default: false
       }
     },
-    watch: {
-    },
+    watch: {},
     methods: {
       showTitle () {
         // return showTitle(item, this)
         let item = this.$route
-        return (item && item.meta && item.meta.title) ? item.meta.title : ''
+        return (item.query.title) ? item.query.title : (item && item.meta && item.meta.title) ? item.meta.title : ''
       },
       getCurrentItem () {
         return this.list[this.list.length - 1]

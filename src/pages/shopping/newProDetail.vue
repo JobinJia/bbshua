@@ -19,7 +19,8 @@
               <Input v-model="item.name"></Input>
             </FormItem>
             <FormItem label="分类">
-              <Select v-model="item.cate_id" placeholder="请选择分类" clearable filterable style="width: 49%;" @on-change="selectColorType">
+              <Select v-model="item.cate_id" placeholder="请选择分类" clearable filterable style="width: 49%;"
+                      @on-change="selectColorType">
                 <Option v-for="item in cateList" :key="item.id" :value="item.id" :label="item.name"></Option>
               </Select>
               <Select v-model="item.s_id" placeholder="请选择色系" clearable filterable style="width: 50%;"
@@ -41,7 +42,7 @@
               <Input v-model="item.sale_word"></Input>
             </FormItem>
             <!--<FormItem label="销量(虚假)">-->
-              <!--<Input v-model="item.sales"></Input>-->
+            <!--<Input v-model="item.sales"></Input>-->
             <!--</FormItem>-->
             <FormItem label="店长最爱(数字越大越靠前)">
               <Input v-model="item.love"></Input>
@@ -49,9 +50,9 @@
             <FormItem label="周销量最高(数字越大越靠前)">
               <Input v-model="item.week"></Input>
             </FormItem>
-            <FormItem label="原价">
-              <Input v-model="item.y_price"></Input>
-            </FormItem>
+            <!--<FormItem label="原价">-->
+              <!--<Input v-model="item.y_price"></Input>-->
+            <!--</FormItem>-->
             <FormItem label="规格">
               <Input v-model="item.unit"></Input>
             </FormItem>
@@ -122,6 +123,7 @@
         </div>
       </Card>
       <Modal title="预览" v-model="visible" style="z-index: 999999;" :transfer="true">
+        <p slot="footer"></p>
         <img :src="imgName" v-if="visible" style="width: 100%">
       </Modal>
     </Col>
@@ -165,7 +167,8 @@
         id: null,
         petalList: [],
         levels: [],
-        defaultList: []
+        defaultList: [],
+        title: null
       }
     },
     created () {
@@ -276,6 +279,10 @@
             tip: '请输入价格'
           }, {
             model: null,
+            name: 'ori_price',
+            tip: '请输入原价'
+          }, {
+            model: null,
             name: 'stock',
             tip: '请输入库存'
           }
@@ -358,6 +365,9 @@
                   break
                 case 'y_price':
                   o.y_price = it.model
+                  break
+                case 'ori_price':
+                  o.ori_price = it.model
                   break
                 case 'stock':
                   o.stock = it.model

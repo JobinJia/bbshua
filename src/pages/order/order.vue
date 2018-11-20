@@ -318,20 +318,20 @@
             align: 'center',
             minWidth: 120,
             tooltip: true,
-            key: 'order_tip_number',
-            render: (h, params) => {
-              let str = ''
-              if (params.row.order_tip_number > 0) {
-                str = <div>
-                  <p>有备注</p>
-                </div>
-              } else {
-                str = <div>
-                  <p>暂无</p>
-                </div>
-              }
-              return str
-            }
+            key: 'order_list_tips'
+            // render: (h, params) => {
+            //   let str = ''
+            //   if (params.row.order_tip_number > 0) {
+            //     str = <div>
+            //       <p>有备注</p>
+            //     </div>
+            //   } else {
+            //     str = <div>
+            //       <p>暂无</p>
+            //     </div>
+            //   }
+            //   return str
+            // }
           }, {
             fixed: 'right',
             title: '操作',
@@ -351,11 +351,12 @@
               // }
 
               let overStr = ''
-              if (!params.row.diff === 1) {
+              /* eslint-disable */
+              if (params.row.diff == 1) {
                 overStr = <p>未补差价</p>
-              } else if (!params.row.diff === 2) {
+              } else if (!params.row.diff == 2) {
                 overStr = <p>未退差价</p>
-              } else if (params.row.diff === 0) {
+              } else if (params.row.diff == 0) {
                 overStr = <p style="marginLeft:3px;">暂未录入</p>
               } else {
                 overStr = <p>已完成</p>

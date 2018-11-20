@@ -46,6 +46,24 @@ export default {
   },
   created () {
   },
+  mounted () {
+    let currentPage = Number(localStorage.getItem('pagination')) || 1
+    this.pages.pageNum = currentPage
+  },
+
+  beforeUpdate () {
+    localStorage.setItem('pagination', this.pages.pageNum)
+  },
+  beforeDestroy () {
+    let cachePage = ['spe', 'new', 'flower', 'team', 'hotFlower']
+    this.$router.beforeEach((to, from, next) => {
+      if (to.name !== 'newProDetail' && (from.name !== 'newProDetail' || !cachePage.includes(to.name))) {
+        localStorage.setItem('lastPage', from.name)
+        localStorage.setItem('pagination', '1')
+      }
+      next()
+    })
+  },
   computed: {
     systemMap () {
       return this.$store.getters.systemMap

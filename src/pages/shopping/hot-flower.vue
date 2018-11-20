@@ -248,7 +248,8 @@
             id: '-1'
           },
           query: {
-            type: this.type
+            type: this.type,
+            title: this.$route.meta.title
           }
         })
       },
@@ -259,7 +260,8 @@
             id: params.row.id
           },
           query: {
-            type: this.type
+            type: this.type,
+            title: this.$route.meta.title
           }
         })
       }

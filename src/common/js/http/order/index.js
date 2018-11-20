@@ -115,7 +115,7 @@ export const saveAddress = (data) => {
 
 export const sendOrder = (data) => {
   return http.request({
-    url: '/order/send-order',
+    url: '/order/send',
     data: data,
     method: 'post'
   })

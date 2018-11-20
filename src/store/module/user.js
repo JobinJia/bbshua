@@ -37,7 +37,6 @@ export default {
           userName,
           password
         }).then(res => {
-          debugger
           const data = res.data
           let {userInfo, menuList, token} = data
           commit('setToken', token)

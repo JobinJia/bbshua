@@ -4,7 +4,7 @@
          style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;
          border: 1px solid #dddde2;padding: 8px 0;">
       <Input search enter-button="搜索" v-model="name" placeholder="请输入商品名称" @on-search="searchHandler" style="width: 300px;"/>
-      <Select clearable filterable v-model="cateId" placeholder="请选择分类" style="width: 200px;">
+      <Select v-if="type === 1" clearable filterable v-model="cateId" placeholder="请选择分类" style="width: 200px;">
         <Option v-for="item in cateList" :key="item.id" :value="item.id" :label="item.name"></Option>
       </Select>
       <Button type="primary" size="large" :ghost="type !== 1" @click="changeTable(1)">热销花材</Button>
@@ -127,9 +127,9 @@
               let id = params.row.id
               let str = ''
               if (params.row.is_show === '1') {
-                str = <i-button type="error" size="small" icon="ios-remove" style="marginLef:3px;" nativeOnClick={this.closeHandle.bind(this, params.row)} ></i-button>
+                str = <i-button type="error" size="small" style="marginLef:3px;" nativeOnClick={this.closeHandle.bind(this, params.row)} >隐藏</i-button>
               } else {
-                str = <i-button type="success" size="small" icon="ios-add" style="marginLef:3px;" nativeOnClick={this.closeHandle.bind(this, params.row)} ></i-button>
+                str = <i-button type="success" size="small" style="marginLef:3px;" nativeOnClick={this.closeHandle.bind(this, params.row)} >显示</i-button>
               }
               // <i-button type="error" size="small" style="marginLeft:3px;"
               //          nativeOnClick={this.closeHandle.bind(this, id)} icon="ios-trash"></i-button>
@@ -147,6 +147,11 @@
     },
     created () {
       this.initPage()
+    },
+    watch: {
+      cateId (cur) {
+        this.getList()
+      }
     },
     methods: {
       initPage () {
@@ -392,7 +397,10 @@
         }
       },
       async onLineHandle () {
-        let {code} = await this.$http.shoAll()
+        let query = {
+          type: this.type
+        }
+        let {code} = await this.$http.shoAll(query)
         if (code === 0) {
           this.$Message.success({
             content: '全部上线成功！'
@@ -401,7 +409,10 @@
         }
       },
       async hideAllHandle () {
-        let {code} = await this.$http.hideAll()
+        let query = {
+          type: this.type
+        }
+        let {code} = await this.$http.hideAll(query)
         if (code === 0) {
           this.$Message.success({
             content: '全部隐藏成功！'

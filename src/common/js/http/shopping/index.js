@@ -107,16 +107,18 @@ export const hideShop = (data) => {
 }
 
 // 全上线
-export const shoAll = () => {
+export const shoAll = (data) => {
   return http.request({
-    url: '/shop/all_show',
+    url: '/shop/all-show',
+    data,
     method: 'post'
   })
 }
 // 全隐藏
-export const hideAll = () => {
+export const hideAll = (data) => {
   return http.request({
-    url: '/shop/all_hide',
+    url: '/shop/all-hide',
+    data,
     method: 'post'
   })
 }

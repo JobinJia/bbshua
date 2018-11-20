@@ -34,12 +34,12 @@
         <tbody style="height:24px;line-height:24px;">
         <tr style="height:24px; line-height:24px;">
           <th style="height:24px; line-height:24px;width:10%;font-size:14px;font-weight:600;">品种代码</th>
-          <th style="height:24px; line-height:24px;width:28%;font-size:14px;font-weight:600;">商品名称</th>
+          <th style="height:24px; line-height:24px;width:20%;font-size:14px;font-weight:600;">商品名称</th>
           <th style="height:24px; line-height:24px;width:8%;font-size:14px;font-weight:600;">等级</th>
           <th style="height:24px; line-height:24px;width:11%;font-size:14px;font-weight:600;">规格</th>
           <th style="height:24px; line-height:24px;width:10%;font-size:14px;font-weight:600;">数量(扎)</th>
-          <th style="height:24px; line-height:24px;width:13%;font-size:14px;font-weight:600;">昆明参考价</th>
-          <th style="height:24px; line-height:24px;width:13%;font-size:14px;font-weight:600;">昆明结算价</th>
+          <th style="height:24px; line-height:24px;width:10%;font-size:14px;font-weight:600;">昆明参考价</th>
+          <th style="height:24px; line-height:24px;width:10%;font-size:14px;font-weight:600;">昆明结算价</th>
           <th style="height:24px; line-height:24px;width:10%;font-size:14px;font-weight:600;">发货数量</th>
           <th style="height:24px; line-height:24px;width:10%;font-size:14px;font-weight:600;">结算单价</th>
         </tr>
@@ -141,9 +141,15 @@
         </tbody>
       </table>
       <div style="border:1px solid #ddd; font-size:14px;min-height:100px;border-top:0px;" v-if="list.order_tip!=0">
-        <div style="font-size:14px;font-weight:600;padding:10px 5px;">【备注】</div>
+        <div style="font-size:14px;font-weight:600;padding:10px 5px;">【平台备注】</div>
         <div v-for="(item,index) in list.order_tip" :key="item.id" style="padding:0 20px; font-size:12px;margin:5px 0;">
           {{index+1}}.&nbsp;&nbsp;{{item.tip}}
+        </div>
+      </div>
+      <div style="border:1px solid #ddd; font-size:14px;min-height:100px;border-top:0px;" v-if="tips!=null">
+        <div style="font-size:14px;font-weight:600;padding:10px 5px;">【平台备注】</div>
+        <div style="padding:0 20px; font-size:12px;margin:5px 0;">
+          {{tips}}
         </div>
       </div>
       <div style="border:1px solid #ddd; font-size:14px;height:40px;line-height:40px;border-top:0px; text-align:right;">
@@ -173,6 +179,7 @@
       return {
         curTime: '',
         id: null,
+        tips: null,
         list: {},
         list1: [{nick_name: '', order_sn: '', created_at: '', pay_at: '', send_at: ''}],
       }
@@ -226,6 +233,7 @@
         data.new_good = newList
         data.free_good = tamList
         this.list = data
+        this.tips = data.tips || null
         this.$nextTick(() => {
           this.list.hot_good = this.list.hot_good.filter(function (item, index) {
             return !(item.cate_id == 16 && item.true_good_price == 0)
